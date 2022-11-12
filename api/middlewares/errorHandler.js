@@ -7,9 +7,9 @@ const errorHandler = (error, req, res, next) => {
     const errorMessage = error.message || 'Unknown errors';
 
     return res.status(errorStatus).json({
-        message : errorMessage,
-        status : errorStatus, 
-        stack : error.stack
+        message: errorMessage,
+        status: errorStatus,
+        stack: error.stack
     });
 
 }

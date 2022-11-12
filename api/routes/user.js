@@ -1,5 +1,5 @@
 import express from 'express';
-import { loggedInUser, login, register } from '../controllers/userController.js';
+import { activateUser, loggedInUser, register, Userlogin } from '../controllers/userController.js';
 
 
 
@@ -9,8 +9,9 @@ const router = express.Router();
 
 // User Auth Routes
 
-router.post('/login', login)
+router.post('/login', Userlogin)
 router.post('/register', register)
+router.post('/activation/:token', activateUser)
 router.get('/me', loggedInUser)
 
 

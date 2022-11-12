@@ -24,14 +24,10 @@ const userSchema = mongoose.Schema({
     },
     email : {
         type : String,
-        trim : true,
-        unique : true
-    },
+        trim : true    },
     mobile : {
         type : String,
-        trim : true,
-        unique : true
-    },
+        trim : true    },
     password : {
         type : String,
         required : true,
@@ -40,7 +36,13 @@ const userSchema = mongoose.Schema({
     birth_date : {
         type : String
     },
-    gender : {
+    birth_month : {
+        type : String
+    },
+    birth_year : {
+        type : String
+    },
+    gander : {
         type : String,
         enum:["Male", "Female", "Custom"]
     },
@@ -113,12 +115,11 @@ const userSchema = mongoose.Schema({
         default : false
     },
     access_token : {
-        type : Boolean,
-        default : false
+        type : String
     },
     isActivate : {
         type : Boolean,
-        default : true
+        default : false
     },
     trash : {
         type : Boolean,

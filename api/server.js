@@ -13,9 +13,6 @@ import cookieParser from 'cookie-parser';
 const app = express();
 dotenv.config();
 
-
-
-
 // middlewares 
 app.use(express.json());
 app.use(express.urlencoded({ extended : false }));
@@ -23,7 +20,7 @@ app.use(cookieParser());
 
  
 // init env variabels
-const PORT = process.env.SERVER_PORT || 8000;
+const PORT = process.env.PORT || 8000;
 
 
 // routes 
