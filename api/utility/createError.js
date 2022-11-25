@@ -1,6 +1,11 @@
 
 
-// create error 
+/**
+ * Gerate Custom Error
+ * @param {*} status 
+ * @param {*} msg 
+ * @returns 
+ */
 const createError = (status, msg) => {
     const err = new Error();
     err.status = status;

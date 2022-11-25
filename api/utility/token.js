@@ -2,7 +2,12 @@
 import jwt from 'jsonwebtoken'
 
 
-// create Access Token
+/**
+ * Generate Access Token
+ * @param {*} payload 
+ * @param {*} exp 
+ * @returns 
+ */
 
 export const createToken = (payload, exp) => {
 
@@ -11,8 +16,11 @@ export const createToken = (payload, exp) => {
     return token
 }
 
-// create Access Token
-
+/**
+ * verify access token
+ * @param {*} token 
+ * @returns 
+ */
 export const verifyToken = (token) => {
 
     const verify_data = jwt.verify(token, process.env.JWT_SECRET)

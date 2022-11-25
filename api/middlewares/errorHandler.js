@@ -1,6 +1,13 @@
 
 
-// create express error handler 
+/**
+ * Error handler for Error
+ * @param {*} error 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 const errorHandler = (error, req, res, next) => {
 
     const errorStatus = error.status || 500;
