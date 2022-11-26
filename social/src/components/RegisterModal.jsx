@@ -27,7 +27,7 @@ const RegisterModal = ({ setModal }) => {
     f_name: "",
     s_name: "",
     mobile: "",
-    email: "",
+    auth: "",
     password: "",
     day : '',
     month : '',
@@ -38,8 +38,7 @@ const RegisterModal = ({ setModal }) => {
   const [validate, setValidate] = useState({
     f_name: false,
     s_name: false,
-    mobile: false,
-    email: false,
+    auth: false,
     password: false,
   });
 
@@ -87,14 +86,14 @@ const RegisterModal = ({ setModal }) => {
   const handleuserSubmit = async (e) => {
     e.preventDefault()
 
-    if (!input.f_name || !input.s_name || !input.email || !input.gender || !input.year || !input.month || !input.day) {
+    if (!input.f_name || !input.s_name || !input.auth || !input.gender || !input.year || !input.month || !input.day) {
       createToast('error', 'All Fields are Required!')
     }else{
       
      diaspatch(userRegister({
       first_name: input.f_name,
       sur_name: input.s_name,
-      email: input.email,
+      auth: input.auth,
       password: input.password,
       gander: input.gender,
       birth_date: input.day,
@@ -103,8 +102,6 @@ const RegisterModal = ({ setModal }) => {
      }, setModal, navigate))
      
     }
-
-
   };
 
   return (
@@ -159,17 +156,17 @@ const RegisterModal = ({ setModal }) => {
               </div>
               <div className="reg-form">
                 <input
-                  name="email"
+                  name="auth"
                   onBlur={handleInputValidate}
-                  className={validate.email && "error-border"}
+                  className={validate.auth && "error-border"}
                   onChange={handleInputChange}
                    onFocus={handleInputValidatefocus}
                   type="text"
-                  value={input.email}
+                  value={input.auth}
                   placeholder="Mobile number or email address"
                 />
                 {
-                validate.email &&  <div className="validate-error f-name-validate">
+                validate.auth &&  <div className="validate-error f-name-validate">
                 <span>What's your email?</span>
                 <span className="error-angle"></span>
               </div>

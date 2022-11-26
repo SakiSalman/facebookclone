@@ -56,7 +56,7 @@ export const userVerificationByOTP = (data, navigate) => async (dispatch) => {
       type: REGISTER_REQUEST,
     });
     await axios
-      .post("/api/v1/user/otp-activation/", { code, email })
+      .post("/api/v1/user/otp-activation/", { code, auth: email })
       .then((res) => {
         createToast("success", res.data.message);
         cookie.remove("OTP");
@@ -86,7 +86,7 @@ export const resendOtp = (data) => async (dispatch) => {
     const { email } = data;
 
     await axios
-      .post("/api/v1/user/resend-code/", { email })
+      .post("/api/v1/user/resend-code/", { auth: email })
       .then((res) => {
         createToast("success", res.data.message);
       })
