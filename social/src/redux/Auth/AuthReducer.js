@@ -16,7 +16,8 @@ const AuthReducer = (state = inititalState, { type, payload }) => {
       return {
         ...state,
         loading: false,
-        message: payload,
+        user: payload.user,
+        message: payload.message,
       };
     case REGISTER_FAILED:
       return {

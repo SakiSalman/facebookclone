@@ -8,6 +8,7 @@ import {
   resetPassword,
   Userlogin,
   resendOtpCode,
+  getUser,
 } from "../controllers/userController.js";
 
 // init router
@@ -16,6 +17,7 @@ const router = express.Router();
 // User Auth Routes
 router.post("/login", Userlogin);
 router.post("/register", register);
+router.post("/get-user", getUser);
 router.post("/reset-password/:token", resetPassword);
 router.post("/resend-code", resendOtpCode);
 router.post("/otp-activation", activationOTP);

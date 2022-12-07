@@ -37,46 +37,14 @@ export const register = async (req, res, next) => {
     }
     const email = validateEmail(auth);
     const mobile = validateNumber(auth);
-
     // validation email or mobile
+    let emailData = null;
+    let mobileData = null;
 
     if (email) {
+      emailData = auth;
+      // check user with this email
       const emailUser = await User.findOne({ email: auth });
-
-      // check available or not
-      if (!emailUser) {
-        // create Username
-        let username = (first_name + sur_name).toLowerCase();
-        let newUsername = await validateUsername(username);
-        // create verification code
-        const code = verification_code(10000, 99999);
-        const user_token = createToken({ id: newUsername._id }, "20m");
-
-        // create New user
-        const newemailUser = await User.create({
-          first_name,
-          sur_name,
-          username: newUsername,
-          email: auth,
-          password: hasPassword(password),
-          gander,
-          birth_date,
-          birth_month,
-          birth_year,
-          access_token: code,
-        });
-        res
-          .status(200)
-          .cookie("OTP", auth, {
-            expires: new Date(Date.now() + 1000 * 60 * 15),
-          })
-          .json({
-            user: newemailUser,
-            token: user_token,
-            message: "User Registration Success! Please Verify Account!",
-          });
-      }
-
       if (emailUser) {
         if (emailUser.isActivate == true) {
           return next(
@@ -86,103 +54,89 @@ export const register = async (req, res, next) => {
             )
           );
         } else {
-          // update verification code and send email
-          const update_verify_code = verification_code(10000, 99999);
-          const update_v_code = await User.findByIdAndUpdate(emailUser._id, {
-            access_token: update_verify_code,
-          });
-          // send activation link to new user
-          const user_token = createToken({ id: update_v_code._id }, "20m");
-          activationLink(update_v_code.email, {
-            name: update_v_code.first_name,
-            link: `${process.env.APP_URL}/api/activation/${user_token}`,
-            code: update_verify_code,
-          });
-
-          res
-            .status(200)
-            .cookie("OTP", update_v_code.email, {
-              expires: new Date(Date.now() + 1000 * 60 * 15),
-            })
-            .json({
-              user: update_v_code,
-              token: user_token,
-              message: "Acount is available please verify acount!",
-            });
+          return next(
+            createError(
+              400,
+              "Already exist acount with this email. Please Verify!"
+            )
+          );
         }
       }
     } else if (mobile) {
+      mobileData = auth;
       // check user with mobile
       const mobileUser = await User.findOne({ mobile: auth });
-      // check available or not
-      if (!mobileUser) {
-        // create Username
-        let username = (first_name + sur_name).toLowerCase();
-        let newUsername = await validateUsername(username);
-        const user_token = createToken({ id: newUsername._id }, "20m");
-        // create verification code
-        const code = verification_code(10000, 99999);
-        // send Sms By mobile
-        sendSMS(auth, `Your Facebook Pro Verification code is ${code}`);
-        // create New user
-        const newMobileUser = await User.create({
-          first_name,
-          sur_name,
-          username: newUsername,
-          mobile: auth,
-          password: hasPassword(password),
-          gander,
-          birth_date,
-          birth_month,
-          birth_year,
-          access_token: code,
-        });
-        res
-          .status(200)
-          .cookie("OTP", newMobileUser.mobile, {
-            expires: new Date(Date.now() + 1000 * 60 * 15),
-          })
-          .json({
-            user: newMobileUser,
-            token: user_token,
-            message: "User Registration Success! Please Verify Account!",
-          });
-      }
 
       if (mobileUser) {
+        // check user with this email
         if (mobileUser.isActivate == true) {
           return next(
             createError(
               400,
-              "Already exist acount with this Mobile Number. Try another one!"
+              "Already exist acount with this Mobile. Try another one!"
             )
           );
         } else {
-          // update verification code and send email
-          const update_verify_code = verification_code(10000, 99999);
-          const update_v_code = await User.findByIdAndUpdate(mobileUser._id, {
-            access_token: update_verify_code,
-          });
-          // send activation link to new user
-          const user_token = createToken({ id: update_v_code._id }, "20m");
-          sendSMS(
-            auth,
-            `Your Facebook Pro Verification code is ${update_v_code}`
-          );
-          res
-            .status(200)
-            .cookie("OTP", mobileUser.mobile, {
-              expires: new Date(Date.now() + 1000 * 60 * 15),
-            })
-            .json({
-              user: mobileUser,
-              token: user_token,
-              message: "Acount is available please verify acount!",
-            });
+          return next(createError(400, "Already exist acount. Please Verify!"));
         }
       }
     } else {
       return next(createError(400, "Enter Valid Email or Phone!"));
+    }
+
+    // create Username
+    let username = (first_name + sur_name).toLowerCase();
+    let newUsername = await validateUsername(username);
+    const user_token = createToken({ id: newUsername._id }, "20m");
+    // create verification code
+    const code = verification_code(10000, 9999999);
+    // create New user
+    const user = await User.create({
+      first_name,
+      sur_name,
+      username: username,
+      email: emailData,
+      mobile: mobileData,
+      password: hasPassword(password),
+      gander,
+      birth_date,
+      birth_month,
+      birth_year,
+      access_token: code,
+    });
+
+    if (user) {
+      if (mobile) {
+        // send Sms By mobile
+        sendSMS(auth, `Your Facebook Pro Verification code is ${code}`);
+        res
+          .status(200)
+          .cookie("OTP", mobileData, {
+            expires: new Date(Date.now() + 1000 * 60 * 15),
+          })
+          .json({
+            user: user,
+            token: user_token,
+            message: "User Registration Success! Please Verify Account!",
+          });
+      }
+      if (email) {
+        activationLink(user.email, {
+          name: user.first_name,
+          link: `${process.env.APP_URL}/api/v1/user/activation/${user_token}/activated`,
+          code: code,
+        });
+        res
+          .status(200)
+          .cookie("OTP", emailData, {
+            expires: new Date(Date.now() + 1000 * 60 * 15),
+          })
+          .json({
+            user: user,
+            token: user_token,
+            message: "User Registration Success! Please Verify Account!",
+          });
+      }
     }
   } catch (error) {
     next(error);
@@ -200,18 +154,22 @@ export const resendOtpCode = async (req, res, next) => {
   try {
     const { auth } = req.body;
 
+    let emailData = null;
+    let mobileData = null;
     const email = validateEmail(auth);
     const mobile = validateNumber(auth);
 
     if (email) {
+      emailData = auth;
       // verify account by email
-      const user = await User.findOne().where({ email: auth });
+
+      const user = await User.findOne().where({ email: emailData });
 
       if (!user) {
         return next(createError(400, "Your account is suspended!"));
       } else {
         // update verification code and send email
-        const update_verify_code = verification_code(10000, 99999);
+        const update_verify_code = verification_code(10000, 999999);
 
         const update_v_code = await User.findByIdAndUpdate(user._id, {
           access_token: update_verify_code,
@@ -221,6 +179,7 @@ export const resendOtpCode = async (req, res, next) => {
         activationLink(user.email, {
           name: user.first_name,
           link: `${process.env.APP_URL}/api/v1/user/activation/${token}/activated`,
+          code: update_verify_code,
         });
         res
           .status(200)
@@ -234,23 +193,25 @@ export const resendOtpCode = async (req, res, next) => {
           });
       }
     } else if (mobile) {
+      mobileData = auth;
       // verify account by email
-      const user = await User.findOne().where({ mobile: auth });
+      const user = await User.findOne().where({ mobile: mobileData });
 
       if (!user) {
         return next(createError(400, "Your account is suspended!"));
       } else {
         // update verification code and send email
-        const update_verify_code = verification_code(10000, 99999);
+        const verification_code = verification_code(10000, 999999);
 
         const update_v_code = await User.findByIdAndUpdate(user._id, {
-          access_token: update_verify_code,
+          access_token: verification_code,
         });
         // send activation link to new user
         const token = createToken({ id: user._id }, "15m");
         activationLink(user.mobile, {
           name: user.first_name,
           link: `${process.env.APP_URL}/api/v1/user/activation/${token}/activated`,
+          code: verification_code,
         });
         res
           .status(200)
@@ -280,7 +241,6 @@ export const activationOTP = async (req, res, next) => {
 
     const email = validateEmail(auth);
     const mobile = validateNumber(auth);
-
     if (email) {
       // verify account by email
       const verifyUser = await User.findOne()
@@ -297,6 +257,8 @@ export const activationOTP = async (req, res, next) => {
             isActivate: true,
           }
         );
+        // create token
+        const user_token = createToken({ id: verifyUser._id }, "20m");
         // aount registered email
         registeredAccount(user.email, {
           email: user.email,
@@ -304,6 +266,7 @@ export const activationOTP = async (req, res, next) => {
         res.status(200).json({
           user: user,
           message: "Verification Success!",
+          token: user_token,
         });
       }
     } else if (mobile) {
@@ -322,11 +285,13 @@ export const activationOTP = async (req, res, next) => {
             isActivate: true,
           }
         );
+        const user_token = createToken({ id: verifyUser._id }, "20m");
         // aount registered sms
         sendSMS(auth, `Your Facebook Pro Verification Success!`);
         res.status(200).json({
           user: user,
           message: "Verification Success!",
+          token: user_token,
         });
       }
     } else {
@@ -414,7 +379,7 @@ export const Userlogin = async (req, res, next) => {
       } else {
         if (!user.isActivate) {
           // create verification code
-          const code = verification_code(10000, 99999);
+          const code = verification_code(10000, 999999);
           // Update Verification code and send email
           const update_user = await User.findByIdAndUpdate(user._id, {
             access_token: code,
@@ -457,7 +422,7 @@ export const Userlogin = async (req, res, next) => {
       } else {
         if (!user.isActivate) {
           // create verification code
-          const code = verification_code(10000, 99999);
+          const code = verification_code(10000, 999999);
           // Update Verification code and send email
           const update_user = await User.findByIdAndUpdate(user._id, {
             access_token: code,
@@ -488,7 +453,6 @@ export const Userlogin = async (req, res, next) => {
     }
   } catch (error) {
     next(error);
-    console.log(error);
   }
 };
 
@@ -523,6 +487,15 @@ export const loggedInUser = async (req, res, next) => {
   } catch (error) {}
 };
 
+/**
+ * @access Privet
+ * @route /api/user/forgot-password
+ * @method POST
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ * @returns
+ */
 export const resetPassword = async (req, res, next) => {
   try {
     const { token } = req.params;
@@ -581,7 +554,7 @@ export const forgotPassword = async (req, res, next) => {
         );
       } else {
         // update verification code and send email
-        const update_verify_code = verification_code(10000, 99999);
+        const update_verify_code = verification_code(10000, 999999);
         const update_user = await User.findByIdAndUpdate(user._id, {
           access_token: update_verify_code,
         });
@@ -592,7 +565,7 @@ export const forgotPassword = async (req, res, next) => {
           link: `${process.env.APP_URL}/api/v1/user/activation/${user_token}`,
           code: update_verify_code,
         });
-        res.json({
+        res.cookie("OTP", update_user.email).json({
           message: "Verification Code Sent! Check the email!",
           user: update_user,
           token: user_token,
@@ -608,21 +581,99 @@ export const forgotPassword = async (req, res, next) => {
         );
       } else {
         // update verification code and send email
-        const update_verify_code = verification_code(10000, 99999);
+        const update_verify_code = verification_code(10000, 999999);
         const update_user = await User.findByIdAndUpdate(user._id, {
           access_token: update_verify_code,
         });
         // send activation link to new user
         const user_token = createToken({ id: update_user._id }, "20m");
         sendSMS(auth, `Your Facebook Pro Verification ${update_verify_code}`);
-        res.json({
+        res.cookie("OTP", update_user.mobile).json({
           message: "Verification Code Sent! Check the email!",
           user: update_user,
           token: user_token,
         });
       }
     } else {
-      return next(400, "Enter Valid Email or phone number!");
+      return next(createError(400, "Enter Valid Email or phone number!"));
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+/**
+ * @access privet
+ * @method GET
+ * @route /api/user/get-user
+ */
+export const getUser = async (req, res, next) => {
+  try {
+    const { auth } = req.body;
+    const email = validateEmail(auth);
+    const mobile = validateNumber(auth);
+
+    if (email) {
+      // verify account by email
+      const user = await User.findOne().where({ email: auth });
+
+      if (!user) {
+        return next(
+          createError(400, "Does not found any Account With this email")
+        );
+      } else {
+        // send activation link to new user
+        const token = createToken({ id: user._id }, "15m");
+        res
+          .status(200)
+          .cookie(
+            "findUser",
+            JSON.stringify({
+              name: user.first_name + " " + user.sur_name,
+              email: user.email,
+              photo: user.photo,
+            }),
+            {
+              expires: new Date(Date.now() + 1000 * 60 * 15),
+            }
+          )
+          .json({
+            user: user,
+            token: token,
+            message: "Scuccess!",
+          });
+      }
+    } else if (mobile) {
+      // verify account by email
+      const user = await User.findOne().where({ mobile: auth });
+
+      if (!user) {
+        return next(
+          createError(400, "Does not found any Account With this mobile")
+        );
+      } else {
+        // send activation link to new user
+        const token = createToken({ id: user._id }, "15m");
+        res
+          .status(200)
+          .cookie(
+            "findUser",
+            JSON.stringify({
+              name: user.first_name + " " + user.sur_name,
+              mobile: user.mobile,
+              photo: user.profile_photo,
+            }),
+            {
+              expires: new Date(Date.now() + 1000 * 60 * 15),
+            }
+          )
+          .json({
+            user: user,
+            token: token,
+            message: "Verify Your account!",
+          });
+      }
+    } else {
+      return next(createError(400, "Enter Valid Email or Phone!"));
     }
   } catch (error) {
     next(error);

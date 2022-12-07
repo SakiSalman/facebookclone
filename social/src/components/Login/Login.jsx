@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Login = ({setModal}) => {
 
@@ -18,7 +19,7 @@ const Login = ({setModal}) => {
                       <button type="submit">Log In</button>
                     </div>                        
                   </form>
-                  <a href="#">Forgotten password?</a>
+                  <Link to={'/forgot-password'}>Forgotten password?</Link>
                   <div className="divider" />
                   <button onClick={(e) => setModal(true)}>Create  New Account</button>
                 </div>

@@ -7,7 +7,8 @@ const Home = () => {
         
       <>
       {/* Header */}
-      <Header/>
+      <Header/> 
+
         {/* FB HOME BODY  */}
         <div className="fb-home-body">
           <div className="fb-home-body-sidebar">

@@ -1,6 +1,48 @@
+import axios from 'axios'
 import React from 'react'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import createToast from '../../Utility/toast'
 
-const Forgot = () => {
+const Forgot = () => {  
+  const navigate = useNavigate()
+
+  const [input, setInput] = useState({
+    auth: ""
+  });
+
+  // Handle Input changer
+
+  const handleInputChange = async (e) => {
+    setInput((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+  // Search User
+  const handleSearch = async (e) => {
+    e.preventDefault()
+
+    if (!input.auth) {
+      createToast('error', 'All Fields are Required!')
+    }else{
+      
+      try {
+        
+      await axios.post('/api/v1/user/get-user', input)
+      .then( res => {
+        navigate('/account/find-user')
+      })
+      .catch( error => {
+        createToast('warn', error.response.data.message)
+      })
+      } catch (err) {
+        createToast(err.response.data.message)
+      } 
+     
+    }
+  };
   return (
     <>
     <div className="reset-area">
@@ -17,16 +59,19 @@ const Forgot = () => {
             <div className="code-box">
               <input
                 className="w-100"
+                name='auth'
                 type="text"
                 placeholder="Email address or mobile number"
+                onChange={handleInputChange}
+                value={input.auth}
               />
             </div>
           </div>
           <div className="reset-footer">
             <a href="#"></a>
             <div className="reset-btns">
-              <a className="cancel" href="#">Cancel</a>
-              <a className="continue" href="#">Search</a>
+              <Link to={'/login'} className="cancel">Cancel</Link>
+              <a onClick={handleSearch} className="continue" href="#">Search</a>
             </div>
           </div>
         </div>

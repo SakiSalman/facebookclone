@@ -36,7 +36,7 @@ const handleCodeSubmit = (e) => {
 
       dispatch(userVerificationByOTP({
         code : code,
-        email : useremail
+        auth : useremail
       }, navigate))
 
       
@@ -44,7 +44,7 @@ const handleCodeSubmit = (e) => {
 }
 const handleResendCode = (e) => {
     e.preventDefault()
-    dispatch(resendOtp({email : useremail}))
+    dispatch(resendOtp({auth : useremail}))
 }
   return (
     

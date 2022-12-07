@@ -3,6 +3,7 @@ const inititalState = {
   loginState: false,
   loading: false,
   message: "",
+  token: "",
 };
 
 export default inititalState;

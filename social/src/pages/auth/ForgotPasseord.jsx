@@ -6,11 +6,9 @@ import ForgotHeader from '../../components/Header/ForgotHeader'
 const ForgotPasseord = () => {
   return (
     <>
-
     <ForgotHeader/>
     <Forgot/>
     <Footer/>
-
     </>
   )
 }

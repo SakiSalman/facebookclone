@@ -10,6 +10,7 @@ import Forgot from "./components/Forgot/Forgot";
 import ForgotPasseord from "./pages/auth/ForgotPasseord";
 import FindUser from "./pages/auth/FindUser";
 import ResetPass from "./pages/auth/ResetPass";
+import VerifyAccount from "./pages/auth/VerifyAccount";
 function App() {
   return (
     <>
@@ -23,10 +24,11 @@ function App() {
       />
       {/* Same as */}
       <Routes>
-        <Route path="/reset-acount" element={<ResetPass />} />
-        <Route path="/account/:token" element={<FindUser />} />
+        <Route path="/reset-acount/:token" element={<ResetPass />} />
+        <Route path="/account/find-user" element={<FindUser />} />
         <Route path="/forgot-password" element={<ForgotPasseord />} />
         <Route path="/:token/activated" element={<Activated />} />
+        <Route path="/account-verify" element={<VerifyAccount />} />
         <Route path="/verify" element={<Verify />} />
         <Route path="/login" element={<Auth />} />
         <Route path="/" element={<Home />} />
