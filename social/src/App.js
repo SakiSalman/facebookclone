@@ -29,7 +29,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPasseord />} />
         <Route path="/:token/activated" element={<Activated />} />
         <Route path="/account-verify" element={<VerifyAccount />} />
-        <Route path="/verify" element={<Verify />} />
+        <Route path="/verify/:type" element={<Verify />} />
         <Route path="/login" element={<Auth />} />
         <Route path="/" element={<Home />} />
       </Routes>

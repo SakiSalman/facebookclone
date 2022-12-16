@@ -29,7 +29,7 @@ export const userRegister = (data, setInput, navigate) => async (dispatch) => {
           password: "",
         });
 
-        navigate("/verify");
+        navigate("/verify/verify-user");
       })
       .catch((err) => {
         dispatch({
@@ -161,6 +161,45 @@ export const verifiedUser = (data, navigate) => async (dispatch) => {
         createToast("success", res.data.message);
 
         navigate(`/reset-acount/${res.data.token}`);
+      })
+      .catch((err) => {
+        dispatch({
+          type: REGISTER_FAILED,
+          payload: err.response.data.message,
+        });
+        createToast("warn", err.response.data.message);
+      });
+  } catch (error) {
+    dispatch({
+      type: REGISTER_FAILED,
+      payload: error.response.data.message,
+    });
+    createToast("error", error.response.data.message);
+  }
+};
+
+// user OTP Verification
+export const loginUser = (data, navigate) => async (dispatch) => {
+  try {
+    dispatch({
+      type: REGISTER_REQUEST,
+    });
+    await axios
+      .post("/api/v1/user/login", {
+        auth: data.auth,
+        password: data.password,
+      })
+      .then((res) => {
+        dispatch({
+          type: REGISTER_SUCCESS,
+          payload: {
+            user: res.data.user,
+            message: res.data.message,
+          },
+        });
+        createToast("success", res.data.message);
+
+        navigate(`/`);
       })
       .catch((err) => {
         dispatch({

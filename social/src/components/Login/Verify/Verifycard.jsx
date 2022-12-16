@@ -1,13 +1,15 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import cookie from 'js-cookie'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import {useDispatch} from 'react-redux'
 import { resendOtp, userVerificationByOTP } from '../../../redux/Auth/action'
 import createToast from '../../../Utility/toast'
+import axios from 'axios'
 
 const Verifycard = () => {
+  const {type} = useParams()
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const useremail = cookie.get('OTP')
@@ -22,6 +24,7 @@ useEffect( () => {
 const handleActivationCancel = (e) => {
   e.preventDefault()
   cookie.remove('OTP')
+  cookie.remove('findUser')
   navigate('/login')
 }
 
@@ -41,6 +44,32 @@ const handleCodeSubmit = (e) => {
 
       
     }
+}
+// handler for reset password Verify user
+const handleResetVerify= async (e) => {
+  e.preventDefault()
+  if (!code) {
+    createToast('warn', 'Enter you OTP code First!')
+  }else{
+
+    try {
+     await axios.post('/api/v1/user/otp-activation/', {
+      auth : useremail,
+      code : code
+     })
+     .then( res=> {
+      createToast('success', res.data.message)
+      navigate(`/reset-acount/${res.data.token}`)
+     })
+     .catch( err => {
+      createToast('warn', err.response.data.message)
+     })
+    } catch (error) {
+      createToast(error.message)
+    }
+
+    
+  }
 }
 const handleResendCode = (e) => {
     e.preventDefault()
@@ -72,7 +101,7 @@ const handleResendCode = (e) => {
             <a onClick={handleResendCode} href="#">Didn't get a code?</a>
             <div className="reset-btns">
               <Link to={'/login'} onClick={handleActivationCancel} className="cancel" href="#">Cancel</Link>
-              <a onClick={handleCodeSubmit} className="continue" href="#">Continue</a>
+              <a onClick={ type === 'verify-user' ? handleCodeSubmit : handleResetVerify} className="continue" href="#">Continue</a>
             </div>
           </div>
         </div>

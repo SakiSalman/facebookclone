@@ -31,10 +31,7 @@ export const register = async (req, res, next) => {
       birth_year,
     } = req.body;
 
-    // validate register data
-    if (!first_name || !sur_name || !auth || !password || !gander) {
-      return next(createError(400, "All field is mandatory!"));
-    }
+    // check auth is email or photne
     const email = validateEmail(auth);
     const mobile = validateNumber(auth);
     // validation email or mobile
@@ -82,6 +79,14 @@ export const register = async (req, res, next) => {
       }
     } else {
       return next(createError(400, "Enter Valid Email or Phone!"));
+    }
+
+    // check user if less then 10 years
+    const checkAge = new Date().getFullYear() - 10;
+    if (birth_year > checkAge) {
+      return next(
+        createError(400, "You must have to be more then 10year Old!")
+      );
     }
 
     // create Username
@@ -373,9 +378,7 @@ export const Userlogin = async (req, res, next) => {
       // search User with email
       const user = await User.findOne({ email: auth });
       if (!user) {
-        return next(
-          createError(404, "Account does not Exist with this email address!!")
-        );
+        return next(createError(404, "Account doesn't Exist with this email!"));
       } else {
         if (!user.isActivate) {
           // create verification code
@@ -391,8 +394,8 @@ export const Userlogin = async (req, res, next) => {
             link: `${process.env.APP_URL}api/v1/user/activation/${new_token}`,
             code: code,
           });
-          res.status(200).json({
-            message: "verification email sent",
+          res.status(200).cookie("OTP", auth).json({
+            message: "Verification email sent",
             user: update_user,
             token: new_token,
           });
@@ -429,7 +432,7 @@ export const Userlogin = async (req, res, next) => {
           });
           // aount registered sms
           sendSMS(auth, `Your Facebook Pro Verification code ${code}`);
-          res.status(200).json({
+          res.status(200).cookie("OTP", auth).json({
             user: user,
             message: "Verification Success!",
           });

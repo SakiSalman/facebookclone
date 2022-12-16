@@ -7,7 +7,6 @@ import { userRegister } from "../redux/Auth/action";
 import { useNavigate } from "react-router-dom";
 
 
-
   // all days
   const days = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]
 
@@ -16,6 +15,9 @@ import { useNavigate } from "react-router-dom";
 
   // Years
   const years = Array.from({ length: 70 }, (_, i) => new Date().getFullYear() - i);
+
+  // curent date and day
+  const date = new Date()
   
 const RegisterModal = ({ setModal }) => {
 
@@ -29,9 +31,9 @@ const RegisterModal = ({ setModal }) => {
     mobile: "",
     auth: "",
     password: "",
-    day : '',
-    month : '',
-    year : '',
+    day : date.getDate(),
+    month : months[date.getMonth()],
+    year : date.getFullYear(),
     gender : ''
   });
 
@@ -42,8 +44,21 @@ const RegisterModal = ({ setModal }) => {
     password: false,
   });
 
+  const [validateMsg, setValidateMsg] = useState({
+    f_name: false,
+    s_name: false,
+    auth: false,
+    password: false,
+  })
+
   // Input update
   const handleInputChange = (e) => {
+    const field_name = e.target.name;
+    setValidateMsg((prev) => ({
+      ...prev,
+      [field_name]: false,
+    }))
+
     setInput((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
@@ -52,10 +67,13 @@ const RegisterModal = ({ setModal }) => {
   /**
    * Validate inputs
    */
-
   const handleInputValidate = (e) => {
     const field_name = e.target.name;
     if (!input[field_name]) {
+      setValidateMsg((prev) => ({
+        ...prev,
+        [field_name]: false,
+      }))
       setValidate((prev) => ({
         ...prev,
         [field_name]: true,
@@ -73,9 +91,9 @@ const RegisterModal = ({ setModal }) => {
  */
   const handleInputValidatefocus = (e) => {
     const field_name = e.target.name;
-    setValidate((prev) => ({
+    setValidateMsg((prev) => ({
       ...prev,
-      [field_name]: false
+      [field_name]: true
     }))
    };
 
@@ -130,7 +148,12 @@ const RegisterModal = ({ setModal }) => {
                   value={input.f_name}
                   placeholder="First Name"
                 />
-
+                 {
+                validateMsg.f_name &&  <div className="validate-error f-name-validate">
+                <span>What's Your Name?</span>
+                <span className="error-angle"></span>
+              </div>
+               }
                 <input
                   name="s_name"
                   onBlur={handleInputValidate}
@@ -141,14 +164,9 @@ const RegisterModal = ({ setModal }) => {
                   value={input.s_name}
                   placeholder="Surname"
                 />
+              
                {
-                validate.f_name &&  <div className="validate-error f-name-validate">
-                <span>What's Your Name?</span>
-                <span className="error-angle"></span>
-              </div>
-               }
-               {
-                validate.s_name &&  <div className="validate-error s-name-validate">
+                validateMsg.s_name &&  <div className="validate-error s-name-validate">
                 <span>What's Your Name?</span>
                 <span className="error-angle"></span>
               </div>
@@ -166,7 +184,7 @@ const RegisterModal = ({ setModal }) => {
                   placeholder="Mobile number or email address"
                 />
                 {
-                validate.auth &&  <div className="validate-error f-name-validate">
+                validateMsg.auth &&  <div className="validate-error f-name-validate">
                 <span>What's your email?</span>
                 <span className="error-angle"></span>
               </div>
@@ -184,7 +202,7 @@ const RegisterModal = ({ setModal }) => {
                   placeholder="New password"
                 />
                  {
-                validate.password &&  <div className="validate-error f-name-validate">
+                validateMsg.password &&  <div className="validate-error f-name-validate">
                 <span>What's your password?</span>
                 <span className="error-angle"></span>
               </div>
@@ -194,10 +212,11 @@ const RegisterModal = ({ setModal }) => {
                 <span>Date of birth</span>
                 <div className="reg-form-select">
                   <select onChange={handleInputChange} name="day" id="day">
+                    
                     {
                       days.map( (items, index) =>                 
 
-                      <option key={index} value={items}>{items}</option>
+                      <option selected={items === input.day ? true : false} key={index} value={items}>{items}</option>
 
                       )
                     }
@@ -206,7 +225,7 @@ const RegisterModal = ({ setModal }) => {
                   {
                       months.map( (items, index) =>                 
 
-                      <option key={index} value={items}>{items}</option>
+                      <option selected={ items === input.month ? true : false} key={index} value={items}>{items}</option>
 
                       )
                     }

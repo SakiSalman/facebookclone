@@ -30,7 +30,7 @@ useEffect(() => {
         photo : user.photo ?? null
       })
   }
-});
+}, []);
 
   
   // handle backpage
@@ -49,7 +49,7 @@ useEffect(() => {
           res => {
             
             createToast('success', res.data.message)
-            navigate(`/account-verify`)
+            navigate(`/verify/verify-reset-account`)
           }
         )
         .catch( err => {

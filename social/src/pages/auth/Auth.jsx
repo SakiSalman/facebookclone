@@ -7,6 +7,7 @@ import logo from '../../_assets/icons/facebook.svg'
 const Auth = () => {
   // modal handler
   const [modal, setModal] = useState(false)
+  
 
   return (
     <>
