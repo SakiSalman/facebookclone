@@ -2,16 +2,20 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import Footer from '../../components/Footer'
 import ForgotHeader from '../../components/Header/ForgotHeader'
-import avatar from '../../_assets/images/avatar.jpg'
 import { useNavigate } from 'react-router-dom'
 import cookie from 'js-cookie'
 import { replaceData } from '../../Utility/helper.js'
 import createToast from '../../Utility/toast'
+import Avatar from '../../components/Avatar/Avatar'
+import { LOADER_START } from '../../redux/TopLoader/loadertypes'
+import { useDispatch } from 'react-redux'
 
 
 const FindUser = () => {
 
 const navigate = useNavigate()
+const dispatch = useDispatch()
+
 // user data states
 const [userData, setuserData] = useState({
   name : '',
@@ -36,6 +40,9 @@ useEffect(() => {
   // handle backpage
   const handleBackPage = () => {
     cookie.remove('OTP')
+    dispatch({
+      type : LOADER_START
+    })
     navigate('/forgot-password')
   }
   // handle Continue
@@ -49,6 +56,9 @@ useEffect(() => {
           res => {
             
             createToast('success', res.data.message)
+            dispatch({
+              type: LOADER_START,
+            });
             navigate(`/verify/verify-reset-account`)
           }
         )
@@ -75,7 +85,7 @@ return (
           </div>
           <div className="reset-body">
             <div className="find-user-account">
-              <img src={userData.photo ?? avatar } alt="" />
+             <Avatar/>
               <span>{userData.name}</span>
               
               {

@@ -14,6 +14,8 @@ const Verifycard = () => {
   const navigate = useNavigate()
   const useremail = cookie.get('OTP')
   const [code, setCode] = useState('')
+
+  console.log(type);
 // navigate to login
 useEffect( () => {
   if (!useremail) {

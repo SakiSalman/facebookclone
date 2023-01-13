@@ -1,11 +1,12 @@
 import React from 'react'
+import Avatar from '../Avatar/Avatar'
 
 const CreatePost = () => {
   return (
     <>
                   <div className="create-post">
             <div className="create-post-header">
-              <img src="./assets/images/user.png" alt="" />
+              <Avatar/>
               <button>Whats on your mind ?</button>
             </div>
             <div className="divider-0" />

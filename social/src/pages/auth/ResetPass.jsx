@@ -8,6 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Footer from '../../components/Footer'
 import ForgotHeader from '../../components/Header/ForgotHeader'
 import { resetPassword } from '../../redux/Auth/action'
+import { LOADER_START } from '../../redux/TopLoader/loadertypes'
 import createToast from '../../Utility/toast'
 
 const ResetPass = () => {
@@ -39,6 +40,9 @@ const ResetPass = () => {
             createToast("success", res.data.message);
             Cookies.remove('OTP')
             Cookies.remove('findUser')
+            dispatch({
+              type: LOADER_START,
+            });
             navigate("/login");
           })
           .catch((err) => {

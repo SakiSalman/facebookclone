@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Avatar from '../Avatar/Avatar'
 
 const UserPost = () => {
     const [showDrop, setShowDrop] = useState(false)
@@ -8,7 +9,7 @@ const UserPost = () => {
     <div className="user-post">
             <div className="user-post-header">
               <div className="post-info">
-                <img src="./assets/images/user.png" alt="" />
+                <Avatar/>
                 <div className="user-details">
                   <a className="author" href="#">Asraful Haque</a>
                   <span>10m &nbsp;
@@ -86,7 +87,7 @@ const UserPost = () => {
                     </ul>
                   </div>
                 }
-                <button onClickCapture={(e) => setShowDrop(true)}>
+                <button onClickCapture={(e) => setShowDrop(!showDrop)}>
                   <svg fill="currentColor" viewBox="0 0 20 20" width="1em" height="1em" className="x1lliihq x1k90msu x2h7rmj x1qfuztq xcza8v6 x1qx5ct2 xw4jnvo">
                     <g fillRule="evenodd" transform="translate(-446 -350)">
                       <path d="M458 360a2 2 0 1 1-4 0 2 2 0 0 1 4 0m6 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0m-12 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0" />

@@ -1,14 +1,10 @@
-
-import bcrypt from 'bcryptjs'
-
+import bcrypt from "bcryptjs";
 
 /**
  * HAS Password with Bcryptjs
- * @param {*} password 
- * @returns 
+ * @param {*} password
+ * @returns
  */
-export const hasPassword = (password) => {
-
-    return bcrypt.hashSync(password, 12)
-
-}   
+export const hasPassword = async (password) => {
+  return await bcrypt.hash(password, 12);
+};

@@ -40,7 +40,7 @@ const handleUserLogin = (e) => {
   
   return (
     <>
-                      <div className="auth-box">
+    <div className="auth-box">
                   <form action>
                     <div className="auth-form">
                       <input onChange={ updateInput} name="auth" value={input.auth} type="text" placeholder="Email address or phone number" />

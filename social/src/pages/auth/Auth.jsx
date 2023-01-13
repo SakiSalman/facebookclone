@@ -20,7 +20,7 @@ const Auth = () => {
               </div>
               <div className="auth-right">
                 <Login setModal={setModal}/>
-                <p><a href="#">Create a Page</a> for a celebrity, brand or business.</p>
+                <p><a href="/">Create a Page</a> for a celebrity, brand or business.</p>
               </div>
             </div>
           </div>

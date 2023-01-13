@@ -3,10 +3,12 @@ import React from 'react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
+import { LOADER_START } from '../../redux/TopLoader/loadertypes'
 import createToast from '../../Utility/toast'
 
 const Forgot = () => {  
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const [input, setInput] = useState({
     auth: ""
@@ -32,6 +34,9 @@ const Forgot = () => {
         
       await axios.post('/api/v1/user/get-user', input)
       .then( res => {
+        dispatch({
+          type : LOADER_START
+        })
         navigate('/account/find-user')
       })
       .catch( error => {

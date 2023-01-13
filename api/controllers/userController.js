@@ -394,7 +394,7 @@ export const Userlogin = async (req, res, next) => {
             link: `${process.env.APP_URL}api/v1/user/activation/${new_token}`,
             code: code,
           });
-          res.status(200).cookie("OTP", auth).json({
+          return res.status(200).cookie("OTP", auth).json({
             message: "Verification email sent",
             user: update_user,
             token: new_token,
@@ -402,6 +402,7 @@ export const Userlogin = async (req, res, next) => {
         } else {
           // check password
           let checkPass = await checkPassword(password, user.password);
+
           // validate password
           if (!checkPass) {
             return next(createError(400, "Wrong Password!"));
@@ -418,11 +419,14 @@ export const Userlogin = async (req, res, next) => {
     } else if (mobile) {
       // search User with email
       const user = await User.findOne({ mobile: auth });
+
       if (!user) {
         return next(
           createError(404, "Account does not Exist with this mobile number!!")
         );
-      } else {
+      }
+
+      if (user) {
         if (!user.isActivate) {
           // create verification code
           const code = verification_code(10000, 999999);
@@ -439,13 +443,15 @@ export const Userlogin = async (req, res, next) => {
         } else {
           // check password
           let checkPass = await checkPassword(password, user.password);
+
           // validate password
+          console.log(checkPass);
           if (!checkPass) {
             return next(createError(400, "Wrong Password!"));
           }
           // create token
           const token = createToken({ id: user._id }, "365d");
-          res.cookie("accessToken", token).status(200).json({
+          return res.cookie("accessToken", token).status(200).json({
             user: user,
             accessToken: token,
           });
@@ -502,34 +508,35 @@ export const loggedInUser = async (req, res, next) => {
 export const resetPassword = async (req, res, next) => {
   try {
     const { token } = req.params;
+
     // verify token with jWT
     const { id } = verifyToken(token);
-
     // verify user
     const user = await User.findOne({ id });
 
     if (!user) {
       return next(createError(404, "Token is invalid."));
     }
+    if (user) {
+      const { password } = req.body;
 
-    const { password } = req.body;
+      // Has user input password
 
-    // Has user input password
+      if (user.password == hasPassword(password)) {
+        return next(
+          createError(404, "Entered Old Password. Enter New Password!")
+        );
+      }
 
-    if (user.password == hasPassword(password)) {
-      return next(
-        createError(404, "Entered Old Password. Enter New Password!")
-      );
+      const update_user = await User.findByIdAndUpdate(user._id, {
+        password: hasPassword(password),
+      });
+
+      res.status(200).json({
+        message: "password changed!",
+        user: update_user,
+      });
     }
-
-    const update_user = await User.findByIdAndUpdate(user._id, {
-      password: hasPassword(password),
-    });
-
-    res.status(200).json({
-      message: "password changed!",
-      user: update_user,
-    });
   } catch (error) {
     next(createError(404, "token is invalid"));
   }

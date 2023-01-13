@@ -63,6 +63,6 @@ export const validateUsername = async (username) => {
  * @returns
  */
 
-export const checkPassword = async (password, haspass) => {
-  return await bcrypt.compare(password, haspass);
+export const checkPassword = async (userPassword, haspass) => {
+  return await bcrypt.compare(userPassword, haspass);
 };

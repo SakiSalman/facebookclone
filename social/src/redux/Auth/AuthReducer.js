@@ -1,7 +1,14 @@
 import {
+  LOGIN_FAILED,
+  LOGIN_REQUEST,
+  LOGIN_SUCCESS,
+  LOGOUT_USER,
   REGISTER_FAILED,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
+  TOKEN_FAILED,
+  TOKEN_REQ,
+  TOKEN_SUCCESS,
 } from "./authType.js";
 import inititalState from "./InitialState.js";
 
@@ -24,10 +31,62 @@ const AuthReducer = (state = inititalState, { type, payload }) => {
         ...state,
         loading: false,
         message: payload,
+        user: null,
       };
 
+    case LOGIN_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case LOGIN_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        user: payload.user,
+        message: payload.message,
+        loginState: true,
+      };
+
+    case LOGIN_FAILED:
+      return {
+        ...state,
+        loading: false,
+        message: payload,
+        loginState: false,
+        user: null,
+      };
+
+    case TOKEN_REQ:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case TOKEN_SUCCESS:
+      return {
+        ...state,
+        user: payload,
+        loginState: true,
+        loading: false,
+      };
+    case TOKEN_FAILED:
+      return {
+        ...state,
+        user: null,
+        loading: false,
+        loginState: false,
+        message: payload,
+      };
+    case LOGOUT_USER:
+      return {
+        ...state,
+        user: null,
+        loginState: false,
+      };
     default:
-      return inititalState;
+      return state;
   }
 };
 

@@ -117,7 +117,7 @@ const RegisterModal = ({ setModal }) => {
       birth_date: input.day,
       birth_month: input.month,
       birth_year: input.year
-     }, setModal, navigate))
+     }, setModal,setModal, navigate))
      
     }
   };

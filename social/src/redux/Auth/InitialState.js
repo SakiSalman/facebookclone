@@ -1,9 +1,9 @@
 const inititalState = {
-  user: {},
+  user: null,
   loginState: false,
   loading: false,
-  message: "",
-  token: "",
+  message: null,
+  token: null,
 };
 
 export default inititalState;
