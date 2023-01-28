@@ -13,3 +13,5 @@ export const TOKEN_SUCCESS = "TOKEN_SUCCESS";
 export const TOKEN_FAILED = "TOKEN_FAILED";
 
 export const LOGOUT_USER = "LOGOUT_USER";
+
+export const USER_PROFILE_UPDATE = "USER_PROFILE_UPDATE";

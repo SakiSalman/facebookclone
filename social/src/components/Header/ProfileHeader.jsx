@@ -88,7 +88,7 @@ const ProfileHeader = () => {
           <button>
             <span class="message-icon"></span> <span>Message</span>
           </button>
-          <button>
+          <button className='blue'>
             <span class="add-friend-icon"></span> <span>Add friend</span>
           </button>
         </div>

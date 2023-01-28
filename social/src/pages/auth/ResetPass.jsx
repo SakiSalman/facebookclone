@@ -25,7 +25,7 @@ const ResetPass = () => {
       navigate('/login')
     }
   })
-  console.log(token);
+
   // handle Reset Password
   const handleResetPassword = async (e) => {
       e.preventDefault()
@@ -46,6 +46,8 @@ const ResetPass = () => {
             navigate("/login");
           })
           .catch((err) => {
+
+            console.log(err);
            createToast("warn", err.response.data.message);
           });
       } catch (error) {

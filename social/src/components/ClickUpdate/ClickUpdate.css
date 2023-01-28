@@ -1,0 +1,40 @@
+.click-update {
+    height: 200px;
+}
+
+.click-update textarea {
+    padding: 12px;
+    text-align: center;
+    border-radius: 5px;
+    width: 100%;
+    outline: none;
+    font-weight: 500;
+    border: 1px solid #ccd0d5;
+    background-color: #f0f2f5;
+}
+
+.click-update textarea:focus {
+    background-color: rgb(255, 255, 255);
+    border: 1px solid #216FDB;
+
+}
+
+.click-update textarea:hover {
+    background-color: #b7b8bb84;
+
+}
+
+.click-update p {
+    margin: 0;
+    padding: 0;
+    text-align: right;
+    margin-bottom: 10px;
+    font-size: 12px;
+}
+
+.click_update_btn {
+    display: flex;
+    align-items: center;
+
+    justify-content: space-between;
+}

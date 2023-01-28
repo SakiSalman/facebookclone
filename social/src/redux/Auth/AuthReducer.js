@@ -9,6 +9,7 @@ import {
   TOKEN_FAILED,
   TOKEN_REQ,
   TOKEN_SUCCESS,
+  USER_PROFILE_UPDATE,
 } from "./authType.js";
 import inititalState from "./InitialState.js";
 
@@ -84,6 +85,13 @@ const AuthReducer = (state = inititalState, { type, payload }) => {
         ...state,
         user: null,
         loginState: false,
+      };
+    case USER_PROFILE_UPDATE:
+      return {
+        ...state,
+        user: {
+          ...payload,
+        },
       };
     default:
       return state;

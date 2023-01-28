@@ -206,10 +206,10 @@ export const resendOtpCode = async (req, res, next) => {
         return next(createError(400, "Your account is suspended!"));
       } else {
         // update verification code and send email
-        const verification_code = verification_code(10000, 999999);
+        const verifi_code = verification_code(10000, 999999);
 
-        const update_v_code = await User.findByIdAndUpdate(user._id, {
-          access_token: verification_code,
+        const v_code = await User.findByIdAndUpdate(user._id, {
+          access_token: verifi_code,
         });
         // send activation link to new user
         const token = createToken({ id: user._id }, "15m");
@@ -508,28 +508,26 @@ export const loggedInUser = async (req, res, next) => {
 export const resetPassword = async (req, res, next) => {
   try {
     const { token } = req.params;
+    const { password } = req.body;
 
     // verify token with jWT
     const { id } = verifyToken(token);
     // verify user
-    const user = await User.findOne({ id });
+    const user = await User.findById(id);
 
     if (!user) {
       return next(createError(404, "Token is invalid."));
-    }
-    if (user) {
-      const { password } = req.body;
-
+    } else {
+      const pass = await hasPassword(password);
       // Has user input password
-
-      if (user.password == hasPassword(password)) {
+      if (user.password === pass) {
         return next(
           createError(404, "Entered Old Password. Enter New Password!")
         );
       }
 
       const update_user = await User.findByIdAndUpdate(user._id, {
-        password: hasPassword(password),
+        password: await hasPassword(password),
       });
 
       res.status(200).json({
@@ -538,7 +536,8 @@ export const resetPassword = async (req, res, next) => {
       });
     }
   } catch (error) {
-    next(createError(404, "token is invalid"));
+    console.log(error);
+    next(createError(404, "tokensss is invalid"));
   }
 };
 /**
@@ -687,5 +686,34 @@ export const getUser = async (req, res, next) => {
     }
   } catch (error) {
     next(error);
+  }
+};
+
+/**
+ * @access Privet
+ * @method Patch
+ * @route /updateUsers
+ * @Purpose Update User Data
+ */
+
+export const updateUsers = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    console.log(req.body);
+    const user = await User.findByIdAndUpdate(id, data, {
+      new: true,
+    });
+
+    if (user) {
+      return res.status(200).json({
+        user: user,
+        message: "Profile Updated Successfully.",
+      });
+    } else {
+      return next(createError(400, "Profile Update Failed."));
+    }
+  } catch (error) {
+    return next(error);
   }
 };

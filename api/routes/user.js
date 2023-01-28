@@ -9,6 +9,7 @@ import {
   Userlogin,
   resendOtpCode,
   getUser,
+  updateUsers,
 } from "../controllers/userController.js";
 
 // init router
@@ -23,6 +24,7 @@ router.post("/resend-code", resendOtpCode);
 router.post("/otp-activation", activationOTP);
 router.post("/activation/:token/activated", activateUser);
 router.post("/forgot-password", forgotPassword);
+router.put("/update-data/:id", updateUsers);
 router.get("/me", loggedInUser);
 
 // export default router

@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "./pages/home/Home";
 import "./_assets/css/style.css";
+import "./_assets/css/modal.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Verify from "./pages/auth/Verify";

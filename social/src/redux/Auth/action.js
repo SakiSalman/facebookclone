@@ -13,6 +13,7 @@ import {
   TOKEN_FAILED,
   TOKEN_REQ,
   TOKEN_SUCCESS,
+  USER_PROFILE_UPDATE,
 } from "./authType";
 
 // Register user
@@ -232,7 +233,6 @@ export const loginUser = (data, navigate) => async (dispatch) => {
           type: LOGIN_FAILED,
           payload: err.response.data.message,
         });
-        console.log(err);
         createToast("warn", err.response.data.message);
       });
   } catch (error) {
@@ -285,4 +285,28 @@ export const userLogout = () => (dispatch) => {
   dispatch({
     type: LOADER_START,
   });
+};
+
+// Profile Update
+
+export const profileDataUpdate = (data, id, setBioShow) => async (dispatch) => {
+  try {
+    await axios
+      .put(`/api/v1/user/update-data/${id}`, data)
+      .then((res) => {
+        createToast("success", res.data.message);
+        setBioShow(false);
+        dispatch({
+          type: USER_PROFILE_UPDATE,
+          payload: res.data.user,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        createToast("warn", err.response.data.message);
+      });
+  } catch (error) {
+    console.log(error);
+    createToast("error", error.response.data.message);
+  }
 };

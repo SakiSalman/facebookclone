@@ -62,6 +62,10 @@ const userSchema = mongoose.Schema(
       type: String,
       default: null,
     },
+    category: {
+      type: String,
+      default: null,
+    },
     work: {
       type: Array,
       default: [],
