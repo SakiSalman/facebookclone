@@ -13,6 +13,8 @@ import createToast from "../../Utility/toast";
 import { profileDataUpdate, profileUpdate } from "../../redux/Auth/action";
 import FbModal from "../Modal/FbModal";
 import ClickUpdate from "../ClickUpdate/ClickUpdate";
+import PopupFullWidth from "../Popups/PopUpFullWidth/PopupFullWidth";
+import StorySlider from "../StorySlider/StorySlider";
 
 const ProfileIntro = () => {
   const dispatch = useDispatch();
@@ -41,6 +43,8 @@ const ProfileIntro = () => {
   const [home, setHome] = useState(user.home_town ? user.home_town : "");
   const [town, setTown] = useState('');
 
+
+  const [showHide, setShowHide] =useState(true)
   // handle details modals
   const modalHandler = () => {
     setDetails(!details);
@@ -609,33 +613,45 @@ return (
 
       {/* Features Card */}
       <div className="featured-card-wrapper">
-        <div className="featured-item-wrapper">
-          <div className="featured-items">
-            <div className="item-img-wrapper">
-              <img src={flower} alt="" />
-              <p className="counter">+3</p>
+        <div className="feature-items-wrapper">
+          <div className="featured-item-wrapper">
+            <div className="featured-items">
+              <div className="item-img-wrapper">
+                <img src={flower} alt="" />
+                <p className="counter">+3</p>
+              </div>
+              <p>Collection</p>
             </div>
-            <p>Collection</p>
+          </div>
+          <div className="featured-item-wrapper">
+            <div className="featured-items">
+              <div className="item-img-wrapper">
+                <img src={flower} alt="" />
+                <p className="counter">+3</p>
+              </div>
+              <p>Collection</p>
+            </div>
+          </div>
+          <div className="featured-item-wrapper">
+            <div className="featured-items">
+              <div className="item-img-wrapper">
+                <img src={flower} alt="" />
+                <p className="counter">+3</p>
+              </div>
+              <p>Collection</p>
+            </div>
           </div>
         </div>
-        <div className="featured-item-wrapper">
-          <div className="featured-items">
-            <div className="item-img-wrapper">
-              <img src={flower} alt="" />
-              <p className="counter">+3</p>
-            </div>
-            <p>Collection</p>
-          </div>
-        </div>
-        <div className="featured-item-wrapper">
-          <div className="featured-items">
-            <div className="item-img-wrapper">
-              <img src={flower} alt="" />
-              <p className="counter">+3</p>
-            </div>
-            <p>Collection</p>
-          </div>
-        </div>
+        <button href="#">Add Features</button>
+
+        {showHide && <PopupFullWidth>
+
+               <div className="popup-story-slider">
+               <StorySlider></StorySlider>
+               </div>
+          
+          </PopupFullWidth>}
+
       </div>
     </FbCard>
   );

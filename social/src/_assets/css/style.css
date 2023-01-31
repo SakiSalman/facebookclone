@@ -1517,7 +1517,7 @@ Components
   gap: 3px;
   background-color: #fff;
   font-family: inherit;
-  z-index: 9999999;
+  z-index: 1;
 }
 
 .fb-profile-header .fb-cover-photo button:hover {
@@ -1770,14 +1770,19 @@ span.camera-icon {
 
 .featured-card-wrapper {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
 }
+
 
 .featured-item-wrapper {
   width: 32%;
   position: relative;
 
+}
+
+.feature-items-wrapper {
+  display: flex;
+  gap: 5px;
 }
 
 .item-img-wrapper img {
@@ -1806,6 +1811,25 @@ span.camera-icon {
 .featured-items p {
   font-size: 15px;
   text-align: center;
+
+}
+
+.featured-card-wrapper button {
+  display: block;
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 10px 0;
+  background-color: #e4e6eb;
+  border-radius: 5px;
+  margin-top: 20px;
+  transition: all .05s ease-in;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.featured-card-wrapper button:hover {
+  background-color: #dfe0e4;
 
 }
 
