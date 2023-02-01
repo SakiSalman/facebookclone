@@ -44,7 +44,7 @@ const ProfileIntro = () => {
   const [town, setTown] = useState('');
 
 
-  const [showHide, setShowHide] =useState(true)
+  const [showHide, setShowHide] =useState(false)
   // handle details modals
   const modalHandler = () => {
     setDetails(!details);
@@ -615,25 +615,7 @@ return (
       <div className="featured-card-wrapper">
         <div className="feature-items-wrapper">
           <div className="featured-item-wrapper">
-            <div className="featured-items">
-              <div className="item-img-wrapper">
-                <img src={flower} alt="" />
-                <p className="counter">+3</p>
-              </div>
-              <p>Collection</p>
-            </div>
-          </div>
-          <div className="featured-item-wrapper">
-            <div className="featured-items">
-              <div className="item-img-wrapper">
-                <img src={flower} alt="" />
-                <p className="counter">+3</p>
-              </div>
-              <p>Collection</p>
-            </div>
-          </div>
-          <div className="featured-item-wrapper">
-            <div className="featured-items">
+            <div className="featured-items" onClick={() => setShowHide(!showHide)}>
               <div className="item-img-wrapper">
                 <img src={flower} alt="" />
                 <p className="counter">+3</p>
@@ -644,10 +626,10 @@ return (
         </div>
         <button href="#">Add Features</button>
 
-        {showHide && <PopupFullWidth>
+        {showHide && <PopupFullWidth hide={setShowHide}>
 
                <div className="popup-story-slider">
-               <StorySlider></StorySlider>
+               <StorySlider hidePopup={setShowHide}></StorySlider>
                </div>
           
           </PopupFullWidth>}

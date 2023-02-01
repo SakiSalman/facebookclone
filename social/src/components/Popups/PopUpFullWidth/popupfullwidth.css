@@ -15,16 +15,24 @@
 
     display: flex;
     align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
 
 }
 
 .full-width-popup-close img {
     width: 30px;
     margin: 10px;
+    z-index: 999999;
+    cursor: pointer;
 }
 
 .popup-user-menu-items {
     position: fixed;
     top: 10px;
     right: 10px;
+    z-index: 99999999;
 }
