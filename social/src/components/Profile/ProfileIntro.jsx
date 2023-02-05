@@ -206,8 +206,6 @@ const ProfileIntro = () => {
 
    const handlePreview = (e) => {
     
-
-
     let newImages = e.target.files
 
     let newArray = Array.from(newImages)
@@ -221,8 +219,6 @@ const ProfileIntro = () => {
     setSelected(items)
 
     setPostImages(newArray)
-
-    
 
   };
 
