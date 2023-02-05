@@ -17,7 +17,9 @@ const StorySlider = ({hidePopup}) => {
     
     let SetTimeOut = setTimeout(() => {
 
-      setIndexItem(indexItem + 1)
+      if (indexItem <= featuredItems.length) {
+        setIndexItem(indexItem + 1)
+      }
       if (indexItem === (featuredItems.length - 1)) {
         hidePopup(false)
       }

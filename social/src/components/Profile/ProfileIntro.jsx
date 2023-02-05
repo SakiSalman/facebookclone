@@ -4,6 +4,7 @@ import wave from "../../_assets/icons/wave.png";
 import flower from "../../_assets/images/flower.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  FaCheckCircle,
   FaExclamationCircle,
   FaGlobeAmericas,
   FaPencilAlt,
@@ -15,6 +16,7 @@ import FbModal from "../Modal/FbModal";
 import ClickUpdate from "../ClickUpdate/ClickUpdate";
 import PopupFullWidth from "../Popups/PopUpFullWidth/PopupFullWidth";
 import StorySlider from "../StorySlider/StorySlider";
+import { set } from "mongoose";
 
 const ProfileIntro = () => {
   const dispatch = useDispatch();
@@ -34,17 +36,21 @@ const ProfileIntro = () => {
   const [edu, setEdu] = useState(user.edu ? user.edu : []);
   const [institute, setInstitute] = useState("");
   const [eduShow, setEduShow] = useState(false);
-  
+
   const [city, setCity] = useState(user.living ? user.living : "");
-  const [country, setCountry] = useState('');
+  const [country, setCountry] = useState("");
   const [cityShow, setCityShow] = useState(false);
-  
+
   const [homeShow, setHomeShow] = useState(false);
   const [home, setHome] = useState(user.home_town ? user.home_town : "");
-  const [town, setTown] = useState('');
+  const [town, setTown] = useState("");
 
+  const [featuredShow, setFeaturedShow] = useState(false);
 
-  const [showHide, setShowHide] =useState(false)
+  const [showHide, setShowHide] = useState(false);
+
+  const [uploadFeatureShow, setUploadFeatureShow] = useState(false);
+ 
   // handle details modals
   const modalHandler = () => {
     setDetails(!details);
@@ -132,73 +138,117 @@ const ProfileIntro = () => {
     dispatch(profileDataUpdate({ edu: filterEdu }, user._id, setEduShow));
   };
 
+  // Show City Area
+  const handleCityShow = (e) => {
+    e.preventDefault();
+    setCityShow(!cityShow);
+  };
 
-    // Show City Area
-    const handleCityShow = (e) => {
-      e.preventDefault();
-      setCityShow(!cityShow);
-    };
-    
-    // handle City Update
-    const handleCityUpdate = (e) => {
-      e.preventDefault()
-      
-      if (!city || !country) {
-        return alert('Set Country and City Both!')
-      }
-      let livingTown = city + ',' +  country
-      dispatch(
-        profileDataUpdate({ living : livingTown }, user._id, setEduShow)
-      );
-    
-    // handle City remove
+  // handle City Update
+  const handleCityUpdate = (e) => {
+    e.preventDefault();
 
-  }
-  const handleLivingRemove = (e) => {
-    e.preventDefault()
-    dispatch(
-      profileDataUpdate({ living : null }, user._id, setEduShow)
-      );
-      
+    if (!city || !country) {
+      return alert("Set Country and City Both!");
     }
-    // Show City Area
-    const handleHomeShow = (e) => {
-      e.preventDefault();
-      setHomeShow(!homeShow);
-    };
-// Update Home towb
-const handleTownUpdate = (e) => {
-  e.preventDefault()
+    let livingTown = city + "," + country;
+    dispatch(profileDataUpdate({ living: livingTown }, user._id, setEduShow));
 
-  let homeTowm = home + "," + country
-  dispatch(
-    profileDataUpdate({ home_town : homeTowm }, user._id, setEduShow)
-  );
+    // handle City remove
+  };
+  const handleLivingRemove = (e) => {
+    e.preventDefault();
+    dispatch(profileDataUpdate({ living: null }, user._id, setEduShow));
+  };
+  // Show City Area
+  const handleHomeShow = (e) => {
+    e.preventDefault();
+    setHomeShow(!homeShow);
+  };
+  // Update Home towb
+  const handleTownUpdate = (e) => {
+    e.preventDefault();
 
-}
-          // handle Home Town remove
+    let homeTowm = home + "," + country;
+    dispatch(profileDataUpdate({ home_town: homeTowm }, user._id, setEduShow));
+  };
+  // handle Home Town remove
 
   const handleHomeRemove = (e) => {
-    e.preventDefault()
-    dispatch(
-      profileDataUpdate({ home_town : null }, user._id, setEduShow)
-    );
+    e.preventDefault();
+    dispatch(profileDataUpdate({ home_town: null }, user._id, setEduShow));
+  };
+  // handle Joined In Facebook Reveal
+  const getJoinedDate = (createdat) => {
+    let data = new Date(user.createdAt);
+    let options = {
+      month: "long",
+    };
+    let year = data.getFullYear();
+    let month = data.toLocaleDateString("en-us", options);
+
+    let joined_date = month + ", " + year;
+    return joined_date;
+  };
+
+  // handle featured modal back
+  const handleFeaturedBack = () => {
+    setFeaturedShow(true);
+    setUploadFeatureShow(false);
+    postImages([]);
+  };
+
+
+
+  // Hanfle featured iamge preview
+
+  const [postImages, setPostImages] = useState([]);
+
+   const handlePreview = (e) => {
+    
+
+
+    let newImages = e.target.files
+
+    let newArray = Array.from(newImages)
+
+    let items = []
+    newArray.forEach(item => {
+
+      items.push(item)
+      
+    })
+    setSelected(items)
+
+    setPostImages(newArray)
+
+    
+
+  };
+
+  // hanfdle change Items
+  const [selected, setSelected] = useState([])
+
+  const handleChangeItems = (e) => {
+
+
+    let newValue = e.target.value
+    console.log(newValue)
+
+    // let oldItems = [...selected]
+
+    // if(selected.includes(newValue)){
+    //   oldItems.splice(selected.indexOf(newValue), 1)
+    // }else{
+    //   oldItems.push(newValue)
+    // }
+
+    // setSelected(oldItems)
 
   }
-// handle Joined In Facebook Reveal
-const getJoinedDate = (createdat) => {
-  let data = new Date(user.createdAt)
-let options = {
-  month : "long"
-  
-}
-let year = data.getFullYear()
-let month  = data.toLocaleDateString('en-us', options)
 
-let joined_date = month + ", " + year
-return joined_date;
-}
-return (
+
+  return (
     <FbCard>
       <h3>Intro</h3>
       <div className="bio">
@@ -280,30 +330,28 @@ return (
               </li>
             ))}
 
-          {
-            user.living &&
+          {user.living && (
             <li>
-            <img
-              src="https://static.xx.fbcdn.net/rsrc.php/v3/y5/r/VMZOiSIJIwn.png?_nc_eui2=AeGKf-i1529iuIZrywwP1JxzysO07LK9kRPKw7Tssr2RE3lRKgVBV082fhw1ePPspUTyDDN-F1KefWJm5Sn8VuR0"
-              alt=""
-            />
-            <span>
-              Lives in <strong> {user.living }</strong>
-            </span>
-          </li>
-          }
-          {
-            user.home_town &&
+              <img
+                src="https://static.xx.fbcdn.net/rsrc.php/v3/y5/r/VMZOiSIJIwn.png?_nc_eui2=AeGKf-i1529iuIZrywwP1JxzysO07LK9kRPKw7Tssr2RE3lRKgVBV082fhw1ePPspUTyDDN-F1KefWJm5Sn8VuR0"
+                alt=""
+              />
+              <span>
+                Lives in <strong> {user.living}</strong>
+              </span>
+            </li>
+          )}
+          {user.home_town && (
             <li>
-            <img
-              src="https://static.xx.fbcdn.net/rsrc.php/v3/y5/r/VMZOiSIJIwn.png?_nc_eui2=AeGKf-i1529iuIZrywwP1JxzysO07LK9kRPKw7Tssr2RE3lRKgVBV082fhw1ePPspUTyDDN-F1KefWJm5Sn8VuR0"
-              alt=""
-            />
-            <span>
-              Home Town at <strong> {user.home_town }</strong>
-            </span>
-          </li>
-          }
+              <img
+                src="https://static.xx.fbcdn.net/rsrc.php/v3/y5/r/VMZOiSIJIwn.png?_nc_eui2=AeGKf-i1529iuIZrywwP1JxzysO07LK9kRPKw7Tssr2RE3lRKgVBV082fhw1ePPspUTyDDN-F1KefWJm5Sn8VuR0"
+                alt=""
+              />
+              <span>
+                Home Town at <strong> {user.home_town}</strong>
+              </span>
+            </li>
+          )}
           <li>
             <img
               src="https://static.xx.fbcdn.net/rsrc.php/v3/yE/r/mp_faH0qhrY.png?_nc_eui2=AeHYM0HHWr5rVV8bx5vo2QfhnFrlaiZVSWecWuVqJlVJZ_TA5dgza2xrZsMSBb6cDj6gYnHD2H8aOCZBXtrohyzN"
@@ -468,25 +516,23 @@ return (
               <div className="profile-intro-items">
                 <span className="intro-title">Current city</span>
                 <span className="profile-caterory-wrapper">
-
-                {
-                  user.living && <li >
-                  <span>
-                    <img
-                     src="https://static.xx.fbcdn.net/rsrc.php/v3/y5/r/VMZOiSIJIwn.png?_nc_eui2=AeGKf-i1529iuIZrywwP1JxzysO07LK9kRPKw7Tssr2RE3lRKgVBV082fhw1ePPspUTyDDN-F1KefWJm5Sn8VuR0"
-                      alt=""
-                    />
-                    <span>
-                      Living at <strong>{user.living}</strong>
-                    </span>
-                  </span>
-                  <FaTrash
-                    className="edit-pen"
-                    onClick={handleLivingRemove}
-                  ></FaTrash>{" "}
-                </li>
-                }
-
+                  {user.living && (
+                    <li>
+                      <span>
+                        <img
+                          src="https://static.xx.fbcdn.net/rsrc.php/v3/y5/r/VMZOiSIJIwn.png?_nc_eui2=AeGKf-i1529iuIZrywwP1JxzysO07LK9kRPKw7Tssr2RE3lRKgVBV082fhw1ePPspUTyDDN-F1KefWJm5Sn8VuR0"
+                          alt=""
+                        />
+                        <span>
+                          Living at <strong>{user.living}</strong>
+                        </span>
+                      </span>
+                      <FaTrash
+                        className="edit-pen"
+                        onClick={handleLivingRemove}
+                      ></FaTrash>{" "}
+                    </li>
+                  )}
                 </span>
 
                 {cityShow && (
@@ -505,41 +551,39 @@ return (
                     }}
                   ></ClickUpdate>
                 )}
-                {
-                  !cityShow && <a href="" onClick={handleCityShow}>
-                  <span className="intro-icon">
-                    <img
-                      src="https://static.xx.fbcdn.net/rsrc.php/v3/yG/r/OcOuC5vm3rq.png?_nc_eui2=AeE0ySyCiCrpB2XHj-SO7137Xco6tKIYP1Fdyjq0ohg_UcHuNS3l5JjrJxJe2HWv3tLTrccSL3YGW6GOlibTv0ii"
-                      alt=""
-                    />{" "}
-                    Add Current City
-                  </span>
-                </a>
-                }
+                {!cityShow && (
+                  <a href="" onClick={handleCityShow}>
+                    <span className="intro-icon">
+                      <img
+                        src="https://static.xx.fbcdn.net/rsrc.php/v3/yG/r/OcOuC5vm3rq.png?_nc_eui2=AeE0ySyCiCrpB2XHj-SO7137Xco6tKIYP1Fdyjq0ohg_UcHuNS3l5JjrJxJe2HWv3tLTrccSL3YGW6GOlibTv0ii"
+                        alt=""
+                      />{" "}
+                      Add Current City
+                    </span>
+                  </a>
+                )}
               </div>
 
               <div className="profile-intro-items">
                 <span className="intro-title">Home Town</span>
                 <span className="profile-caterory-wrapper">
-
-                {
-                  user.home_town && <li >
-                  <span>
-                    <img
-                     src="https://static.xx.fbcdn.net/rsrc.php/v3/y5/r/VMZOiSIJIwn.png?_nc_eui2=AeGKf-i1529iuIZrywwP1JxzysO07LK9kRPKw7Tssr2RE3lRKgVBV082fhw1ePPspUTyDDN-F1KefWJm5Sn8VuR0"
-                      alt=""
-                    />
-                    <span>
-                      Home Town at <strong>{user.home_town}</strong>
-                    </span>
-                  </span>
-                  <FaTrash
-                    className="edit-pen"
-                    onClick={handleHomeRemove}
-                  ></FaTrash>{" "}
-                </li>
-                }
-
+                  {user.home_town && (
+                    <li>
+                      <span>
+                        <img
+                          src="https://static.xx.fbcdn.net/rsrc.php/v3/y5/r/VMZOiSIJIwn.png?_nc_eui2=AeGKf-i1529iuIZrywwP1JxzysO07LK9kRPKw7Tssr2RE3lRKgVBV082fhw1ePPspUTyDDN-F1KefWJm5Sn8VuR0"
+                          alt=""
+                        />
+                        <span>
+                          Home Town at <strong>{user.home_town}</strong>
+                        </span>
+                      </span>
+                      <FaTrash
+                        className="edit-pen"
+                        onClick={handleHomeRemove}
+                      ></FaTrash>{" "}
+                    </li>
+                  )}
                 </span>
 
                 {homeShow && (
@@ -558,17 +602,17 @@ return (
                     }}
                   ></ClickUpdate>
                 )}
-                {
-                  !homeShow&& <a href="" onClick={handleHomeShow}>
-                  <span className="intro-icon">
-                    <img
-                      src="https://static.xx.fbcdn.net/rsrc.php/v3/yG/r/OcOuC5vm3rq.png?_nc_eui2=AeE0ySyCiCrpB2XHj-SO7137Xco6tKIYP1Fdyjq0ohg_UcHuNS3l5JjrJxJe2HWv3tLTrccSL3YGW6GOlibTv0ii"
-                      alt=""
-                    />{" "}
-                    Add Current City
-                  </span>
-                </a>
-                }
+                {!homeShow && (
+                  <a href="" onClick={handleHomeShow}>
+                    <span className="intro-icon">
+                      <img
+                        src="https://static.xx.fbcdn.net/rsrc.php/v3/yG/r/OcOuC5vm3rq.png?_nc_eui2=AeE0ySyCiCrpB2XHj-SO7137Xco6tKIYP1Fdyjq0ohg_UcHuNS3l5JjrJxJe2HWv3tLTrccSL3YGW6GOlibTv0ii"
+                        alt=""
+                      />{" "}
+                      Add Current City
+                    </span>
+                  </a>
+                )}
               </div>
             </div>
             <div className="profile-modal-footer">
@@ -615,7 +659,10 @@ return (
       <div className="featured-card-wrapper">
         <div className="feature-items-wrapper">
           <div className="featured-item-wrapper">
-            <div className="featured-items" onClick={() => setShowHide(!showHide)}>
+            <div
+              className="featured-items"
+              onClick={() => setShowHide(!showHide)}
+            >
               <div className="item-img-wrapper">
                 <img src={flower} alt="" />
                 <p className="counter">+3</p>
@@ -624,16 +671,98 @@ return (
             </div>
           </div>
         </div>
-        <button href="#">Add Features</button>
+        {showHide && (
+          <PopupFullWidth hide={setShowHide}>
+            <div className="popup-story-slider">
+              <StorySlider hidePopup={setShowHide}></StorySlider>
+            </div>
+          </PopupFullWidth>
+        )}
+        <button href="#" onClick={() => setFeaturedShow(true)}>
+          Add Features
+        </button>
+        {
+          <div className="add feature-modals-wrapp">
+            {featuredShow && !uploadFeatureShow && (
+              <FbModal
+                title={"Edit Featured"}
+                uploadFeatured={uploadFeatureShow}
+                closmodal={() => setFeaturedShow(false)}
+              >
+                {/* Featured Modal Content */}
+                <div className="add-feature-wrapper">
+                  <img
+                    src="https://i.ibb.co/f2v2yVk/Screenshot-3.png"
+                    alt="Screenshot-3"
+                    border="0"
+                  />
+                  <p>
+                    Features your favurite photos and stories to show all of
+                    your friends!
+                  </p>
+                  <button onClick={() => setUploadFeatureShow(true)}>
+                    Add New
+                  </button>
+                </div>
+              </FbModal>
+            )}
+            {uploadFeatureShow && (
+              <FbModal
+                title={"Upload Featured Image"}
+                uploadFeatured={uploadFeatureShow}
+                closmodal={() => setFeaturedShow(false)}
+                handleBackBtn={handleFeaturedBack}
+              >
+                {/* Featured Modal Content */}
+                <div className="featured-contentwrapper-upload">
+                  <div className="add-feature-wrapper featured-upload-wrapper">
+                    <label
+                      htmlFor="uploadFeature"
+                      className="upload-file-label"
+                    >
+                      Upload Photo
+                    </label>
+                    <input
+                      onChange={handlePreview}
+                      type="file"
+                      name=""
+                      id="uploadFeature"
+                      multiple={true}
+                      hidden
+                    />
+                    <br />
 
-        {showHide && <PopupFullWidth hide={setShowHide}>
+                    <div className="featured-preview">
+                      {postImages &&
+                        postImages.map((item, index) => {
 
-               <div className="popup-story-slider">
-               <StorySlider hidePopup={setShowHide}></StorySlider>
-               </div>
-          
-          </PopupFullWidth>}
+                        let imgUrl = URL.createObjectURL(item)
 
+
+                         return  <label htmlFor={`checked-${index}`} key={index}>
+                         <div
+                           className="featured-preview-item"
+                           style={{ backgroundImage: `url(${imgUrl})` }}
+                         >
+                           <input type="checkbox" id={`checked-${index}`} checked={selected.includes(item)}   onChange={handleChangeItems} value={item} />
+                           <div className="container checked-icon">
+                             <div className="round">
+                               <FaCheckCircle style={{fontSize:'18px', color:'#ffff'}}/>
+                             </div>
+                           </div>
+                         </div>
+                       </label>
+                        })}
+                    </div>
+                  </div>
+                  <div className="featured-upload-btn">
+                    <button>Next</button>
+                  </div>
+                </div>
+              </FbModal>
+            )}
+          </div>
+        }
       </div>
     </FbCard>
   );

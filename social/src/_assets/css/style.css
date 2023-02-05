@@ -2144,3 +2144,93 @@ span.camera-icon {
 .edit-pen {
   cursor: pointer;
 }
+
+/* featured items */
+
+.add-feature-wrapper {
+  padding: 20px;
+  text-align: center;
+}
+
+.featured-upload-wrapper {
+  min-height: 500px;
+}
+
+.add-feature-wrapper img {
+  width: 450px;
+}
+
+.add-feature-wrapper button {
+  background-color: #d4e6f7;
+  color: #056fe7;
+}
+
+.add-feature-wrapper button:hover {
+  background-color: #c7e2fc;
+  transition: .3s ease;
+}
+
+button.back-btn-featured {
+  left: 10px;
+  right: auto;
+}
+
+.add-feature-wrapper label.upload-file-label {
+  display: block;
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 10px 0;
+  background-color: #c7e2fc;
+  border-radius: 5px;
+  transition: all .05s ease-in;
+  cursor: pointer;
+  font-weight: 600;
+  color: #1876f2
+}
+
+.add-feature-wrapper label.upload-file-label:hover {
+  background-color: #abd3f9;
+  transition: .3s ease;
+}
+
+.featured-preview {
+  width: 100%;
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.featured-preview .featured-preview-item {
+  width: 128px;
+  height: 250px;
+  background-color: #ddd;
+  border-radius: 5px;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+
+}
+
+.featured-preview .checked-icon {
+  position: absolute;
+  bottom: 0;
+  right: 10px;
+
+}
+
+.featured-contentwrapper-upload button {
+  display: inline-block;
+}
+
+.featured-upload-btn {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0px 20px;
+}
+
+.featured-upload-btn button {
+  width: 150px;
+  background-color: #abd3f9;
+}
