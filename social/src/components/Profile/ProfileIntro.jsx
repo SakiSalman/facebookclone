@@ -195,7 +195,7 @@ const ProfileIntro = () => {
   const handleFeaturedBack = () => {
     setFeaturedShow(true);
     setUploadFeatureShow(false);
-    postImages([]);
+    setPostImages([]);
   };
 
 
@@ -203,6 +203,7 @@ const ProfileIntro = () => {
   // Hanfle featured iamge preview
 
   const [postImages, setPostImages] = useState([]);
+  const [selected, setSelected] = useState([])
 
    const handlePreview = (e) => {
     
@@ -210,36 +211,29 @@ const ProfileIntro = () => {
 
     let newArray = Array.from(newImages)
 
-    let items = []
-    newArray.forEach(item => {
 
-      items.push(item)
-      
-    })
-    setSelected(items)
+    setPostImages((prev) => ([...prev, ...newArray]))
 
-    setPostImages(newArray)
+    setSelected((prev) => ([...prev, ...newArray]))
 
   };
 
   // hanfdle change Items
-  const [selected, setSelected] = useState([])
+ 
 
   const handleChangeItems = (e) => {
 
+        const updateList = [...selected]
 
-    let newValue = e.target.value
-    console.log(newValue)
+        const val = postImages.find(data => data.name == e.target.value)
+        if(selected.includes(val)){
+           updateList.splice(updateList.indexOf(val), 1)
+        }else{
+          updateList.push(val)
+        }
 
-    // let oldItems = [...selected]
-
-    // if(selected.includes(newValue)){
-    //   oldItems.splice(selected.indexOf(newValue), 1)
-    // }else{
-    //   oldItems.push(newValue)
-    // }
-
-    // setSelected(oldItems)
+      setSelected(updateList)
+      setSelected(updateList)
 
   }
 
@@ -732,15 +726,21 @@ const ProfileIntro = () => {
                       {postImages &&
                         postImages.map((item, index) => {
 
-                        let imgUrl = URL.createObjectURL(item)
 
+                        let imgUrl = URL.createObjectURL(item)
 
                          return  <label htmlFor={`checked-${index}`} key={index}>
                          <div
                            className="featured-preview-item"
                            style={{ backgroundImage: `url(${imgUrl})` }}
                          >
-                           <input type="checkbox" id={`checked-${index}`} checked={selected.includes(item)}   onChange={handleChangeItems} value={item} />
+                           <input 
+                           type="checkbox" 
+                           id={`checked-${index}`} 
+                           checked={selected.includes(item)}  
+                            onChange={handleChangeItems} 
+                            value={item.name} 
+                            />
                            <div className="container checked-icon">
                              <div className="round">
                                <FaCheckCircle style={{fontSize:'18px', color:'#ffff'}}/>

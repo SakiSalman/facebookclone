@@ -9,27 +9,27 @@ const ProfileHeader = () => {
     <>
       
               {/* <!-- Cover Photo  --> */}
-    <div class="fb-profile-header">
-      <div class="fb-header-shad"></div>
-      <div class="fb-cover-photo">
+    <div className="fb-profile-header">
+      <div className="fb-header-shad"></div>
+      <div className="fb-cover-photo">
         <img
           src="https://images.pexels.com/photos/1323206/pexels-photo-1323206.jpeg?cs=srgb&dl=pexels-mixu-1323206.jpg&fm=jpg"
           alt=""
         />
-        <button><span class="camera-icon"></span> Edit cover photo</button>
+        <button><span className="camera-icon"></span> Edit cover photo</button>
       </div>
-      <div class="fb-profile-details">
-        <div class="profile-info">
-          <div class="profile-photo">
+      <div className="fb-profile-details">
+        <div className="profile-info">
+          <div className="profile-photo">
             <Avatar/>
           </div>
-          <div class="profile-desc">
+          <div className="profile-desc">
             <h1>{user.first_name} {user.sur_name} <span>( neooo inc )</span></h1>
-            <div class="profile-follow-details">
-              <span class="profile-followers">15k follower</span>
-              <span class="profile-following">1k following</span>
+            <div className="profile-follow-details">
+              <span className="profile-followers">15k follower</span>
+              <span className="profile-following">1k following</span>
             </div>
-            <div class="profile-friends-list">
+            <div className="profile-friends-list">
               <ul>
                 <li>
                   <img
@@ -83,17 +83,17 @@ const ProfileHeader = () => {
             </div>
           </div>
         </div>
-        <div class="profile-action">
-          <button><span class="follow-icon"></span> <span>Follow</span></button>
+        <div className="profile-action">
+          <button><span className="follow-icon"></span> <span>Follow</span></button>
           <button>
-            <span class="message-icon"></span> <span>Message</span>
+            <span className="message-icon"></span> <span>Message</span>
           </button>
           <button className='blue'>
-            <span class="add-friend-icon"></span> <span>Add friend</span>
+            <span className="add-friend-icon"></span> <span>Add friend</span>
           </button>
         </div>
       </div>
-      <div class="fb-profile-menu">
+      <div className="fb-profile-menu">
         <ul>
           <li><a href="#">Posts</a></li>
           <li><a href="#">About</a></li>

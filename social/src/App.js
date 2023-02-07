@@ -57,7 +57,7 @@ function App() {
         <Route path="/account/find-user" element={<FindUser />} />
         <Route path="/forgot-password" element={<ForgotPasseord />} />
         <Route path="/:token/activated" element={<Activated />} />
-        <Route path="/account-verify" element={<VerifyAccount />} />
+        {/* <Route path="/account-verify" element={<VerifyAccount />} /> */}
         <Route path="/verify/:type" element={<Verify />} />
         <Route
           path="/login"
