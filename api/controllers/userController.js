@@ -766,3 +766,47 @@ export const addFeaturedSlider = async (req, res, next) => {
     return next(error);
   }
 };
+
+/**
+ * @access Privet
+ * @method Patch
+ * @route /updateFeatured Slider
+ * @Purpose Update User Data
+ */
+
+export const editFeaturedData = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const data = req.body;
+
+    const { featured } = await User.findById(id);
+
+    const user = await User.findByIdAndUpdate(
+      id,
+      {
+        featured: [
+          ...featured,
+          {
+            ...featured[data.sliderId],
+            sliders: data.sliders,
+          },
+        ],
+      },
+      {
+        new: true,
+      }
+    );
+
+    if (user) {
+      return res.status(200).json({
+        user: user,
+        message: "Profile Updated Successfully.",
+      });
+    } else {
+      return next(createError(400, "Profile Update Failed."));
+    }
+  } catch (error) {
+    return next(error);
+  }
+};
