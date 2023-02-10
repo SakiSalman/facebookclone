@@ -61,7 +61,7 @@ const handleSliderNext = (e) => {
     <div className="slider-item-wrap">
 
       <img style={{width:'100%', height:'100%',
-    objectFit:'cover'}} src={`http://127.0.0.1:5050/sliders/${data[indexItem]}`} alt="" />
+    objectFit:'cover'}} src={`/sliders/${data[indexItem]}`} alt="" />
        
          
     </div>

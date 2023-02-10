@@ -6,10 +6,13 @@ import mongoDBConnect from "./config/db.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import path from "path";
 
 // init express
 const app = express();
 dotenv.config();
+
+const __dirname = path.resolve();
 
 app.use(cors());
 
@@ -17,7 +20,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static("api/public"));
+app.use(express.static(path.join(__dirname, "/api/public")));
 // init env variabels
 const PORT = process.env.PORT || 8000;
 
