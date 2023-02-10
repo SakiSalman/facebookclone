@@ -10,6 +10,9 @@ import {
   FaPencilAlt,
   FaTrash,
   FaRegCircle,
+  FaPenAlt,
+  FaPen,
+  FaPenFancy,
 } from "react-icons/fa";
 import createToast from "../../Utility/toast";
 import { profileDataUpdate, profileUpdate } from "../../redux/Auth/action";
@@ -61,6 +64,9 @@ const ProfileIntro = () => {
   const [postImages, setPostImages] = useState([]);
   const [selected, setSelected] = useState([]);
   const [collectionTitle, setCollectionTitle] = useState("");
+
+
+  const [editFeatured, setEditFeatured] = useState(false)
 
   // handle details modals
   const modalHandler = () => {
@@ -237,8 +243,7 @@ const ProfileIntro = () => {
     } else {
       updateList.push(val);
     }
-
-    setSelected(updateList);
+    console.log(selected);
     setSelected(updateList);
   };
   // hanfle edit featured image modal
@@ -286,6 +291,63 @@ const ProfileIntro = () => {
     setShowHide(!showHide);
     setSliderIndex(user.featured[id].sliders);
   };
+
+  // handle edit featured Modal
+
+  const [editSelected, setEditSelected] = useState('')
+  const [ids, setIds] = useState('')
+  const [feturedEditData, setFeaturedEditData] = useState([])
+
+  const handleEditFeaturedModal = (e, id) => {
+    e.preventDefault()
+    setIds(id)
+    setEditFeatured(true)
+    setEditSelected(user.featured[id])
+    setFeaturedEditData(user.featured[id].sliders)
+    
+    
+  }
+
+  // handle edit item change
+  const handleEditUpdate = (e) => {
+    const updateList = [...editSelected.sliders];
+
+
+    const val = feturedEditData.find((data) => data === e.target.value);
+    if (editSelected.sliders.includes(val)) {
+      updateList.splice(updateList.indexOf(val), 1);
+    } else {
+      updateList.push(val);
+    }
+
+   setEditSelected({...editSelected, sliders : updateList})
+
+   
+
+  };
+
+  // Handle Edit Featured Upload
+  const handleEditFeaturedUpload = (e) => {
+      e.preventDefault()
+      axios.patch(
+        `http://localhost:5050/api/v1/user/edit-featured-slider/${user._id}`,
+        {sliderId :ids,
+        sliders : editSelected}
+      ).then(res => {
+        setUpFeatureColection(false)
+        setEditFeatured(false)
+        setShowHide(false)
+        dispatch({
+          type : FEATURED_IMAGE_UPDATE,
+          payload : res.data.user
+        })
+      }).catch(err =>{
+          console.log(err);
+      });
+
+      
+     
+  }
 
   return (
     <FbCard>
@@ -738,23 +800,148 @@ const ProfileIntro = () => {
                 uploadFeatured={uploadFeatureShow}
                 closmodal={() => setFeaturedShow(false)}
               >
+
+
                 {/* Featured Modal Content */}
+
                 <div className="add-feature-wrapper">
-                  <img
-                    src="https://i.ibb.co/f2v2yVk/Screenshot-3.png"
-                    alt="Screenshot-3"
-                    border="0"
-                  />
-                  <p>
-                    Features your favurite photos and stories to show all of
-                    your friends!
-                  </p>
+                  
+                  <div className="edit-featured-content-wrap">
+                    {
+                      user.featured && user.featured.map((items, index)=>{
+                      
+                        return <div className="previous-featured-image-wrapper" onClick={(e)=>handleEditFeaturedModal(e, index)}>
+                        <div className="featured-edit-image-wrapper">
+                            <img src={`/sliders/${items.sliders[index]}`} alt="" />
+                        </div>
+                        <div className="featured-edit-content">
+                          <div className="main-content-wrap">
+                            <p className="collection-name">{items.name}</p>
+                            <p>{items.sliders.length} Items</p>
+                          </div>
+                          <div className="featured-edit-icon">
+                            <FaPenFancy fill=""/>
+                          </div>
+                        </div>
+                      </div>
+                      })
+                      
+                    }
+
+                    {
+                      !user.featured &&  <>
+                      <img
+                      src="https://i.ibb.co/f2v2yVk/Screenshot-3.png"
+                      alt="Screenshot-3"
+                      border="0"
+                    />
+                    <p>
+                      Features your favurite photos and stories to show all of
+                      your friends!
+                    </p>
+                    </>
+                    }
+
+
+
+                   
+                  </div>
+
                   <button onClick={() => setUploadFeatureShow(true)}>
-                    Add New
-                  </button>
+                      Add New
+                    </button>
                 </div>
+                
               </FbModal>
             )}
+
+            {/* Edit Featured Item Show Modal */}
+
+            {
+              editFeatured && <FbModal
+              title={"Edit Featured Collection"}
+              uploadFeatured={editFeatured}
+              closmodal={() => setEditFeatured(false)}
+              handleBackBtn={handleUploadBack}
+            >
+              {/* Featured Modal Content */}
+              <div className="featured-contentwrapper-upload">
+                <div className="editFeaturedUpload-wrapper">
+                  <div className="collection-wrap">
+                    <div className="colverImg">
+                      <img src={`/sliders/${editSelected.sliders[0]}`} alt="" />
+                    </div>
+                    <div className="collection-title">
+                      <input
+                        type="text"
+                        placeholder="collection Name"
+                        value={editSelected.name}
+                        onChange={handleCollectionTitle}
+                      />
+                    </div>
+                  </div>
+                  <hr />
+                  <div className="featured-preview">
+                    {editSelected.sliders &&
+                      editSelected.sliders.map((item, index) => {
+
+
+                       
+                       
+                        return (
+                          <label htmlFor={`checked-${index}`} key={index}>
+                            <div
+                              className="featured-preview-item"
+                              style={{backgroundImage:`url(/sliders/${item}))`}}
+                            >
+                             
+                              <input
+                                type="checkbox"
+                                id={`checked-${index}`}
+                                checked={editSelected.sliders.includes(item)}
+                                onChange={handleEditUpdate}
+                                value={item}
+                                hidden
+                                className="feature-preview-images"
+                              />
+                              <div className="container checked-icon">
+                                <div className="round">
+                                  {editSelected.sliders.includes(item) && (
+                                    <FaCheckCircle
+                                      className="icon-checked checked-icon"
+                                      style={{
+                                        fontSize: "18px",
+                                        color: "#ffff",
+                                      }}
+                                    />
+                                  )}
+                                  {!editSelected.sliders.includes(item) && (
+                                    <FaRegCircle
+                                      className="icon-unchecked checked-icon"
+                                      style={{
+                                        fontSize: "18px",
+                                        color: "#ffff",
+                                      }}
+                                    />
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </label>
+                        );
+                      })}
+                  </div>
+                </div>
+                <div className="featured-upload-btn">
+                  <button className="" onClick={handleEditFeaturedUpload}>Upload</button>
+                </div>
+              </div>
+            </FbModal>
+
+            }
+
+
+            {/* Upload featured item modal */}
             {uploadFeatureShow && (
               <FbModal
                 title={"Upload Featured Image"}

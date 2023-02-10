@@ -10,7 +10,6 @@ const StorySlider = ({hidePopup, data}) => {
 
   const [indexItem, setIndexItem] = useState(0)
 
-  let image = data[indexItem]
   useEffect(()=>{
 
     let SetTimeOut = setTimeout(() => {
