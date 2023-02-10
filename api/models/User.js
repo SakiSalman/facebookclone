@@ -109,6 +109,10 @@ const userSchema = mongoose.Schema(
       type: Array,
       default: [],
     },
+    featured: {
+      type: Array,
+      default: [],
+    },
     block: {
       type: Array,
       default: [],

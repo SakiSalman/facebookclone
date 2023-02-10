@@ -50,6 +50,7 @@ export const userRegister =
             payload: err.response.data.message,
           });
           createToast("warn", err.response.data.message);
+          console.log(err);
         });
     } catch (error) {
       dispatch({
@@ -289,24 +290,26 @@ export const userLogout = () => (dispatch) => {
 
 // Profile Update
 
-export const profileDataUpdate = (data, id, setBioShow) => async (dispatch) => {
-  try {
-    await axios
-      .put(`/api/v1/user/update-data/${id}`, data)
-      .then((res) => {
-        createToast("success", res.data.message);
-        setBioShow(false);
-        dispatch({
-          type: USER_PROFILE_UPDATE,
-          payload: res.data.user,
+export const profileDataUpdate =
+  (data, id, setBioShow = null) =>
+  async (dispatch) => {
+    try {
+      await axios
+        .put(`/api/v1/user/update-data/${id}`, data)
+        .then((res) => {
+          createToast("success", res.data.message);
+          setBioShow && setBioShow(false);
+          dispatch({
+            type: USER_PROFILE_UPDATE,
+            payload: res.data.user,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          createToast("warn", err.response.data.message);
         });
-      })
-      .catch((err) => {
-        console.log(err);
-        createToast("warn", err.response.data.message);
-      });
-  } catch (error) {
-    console.log(error);
-    createToast("error", error.response.data.message);
-  }
-};
+    } catch (error) {
+      console.log(error);
+      createToast("error", error.response.data.message);
+    }
+  };

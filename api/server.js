@@ -17,7 +17,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
+app.use(express.static("api/public"));
 // init env variabels
 const PORT = process.env.PORT || 8000;
 

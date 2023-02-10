@@ -1,4 +1,5 @@
 import {
+  FEATURED_IMAGE_UPDATE,
   LOGIN_FAILED,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
@@ -87,6 +88,13 @@ const AuthReducer = (state = inititalState, { type, payload }) => {
         loginState: false,
       };
     case USER_PROFILE_UPDATE:
+      return {
+        ...state,
+        user: {
+          ...payload,
+        },
+      };
+    case FEATURED_IMAGE_UPDATE:
       return {
         ...state,
         user: {

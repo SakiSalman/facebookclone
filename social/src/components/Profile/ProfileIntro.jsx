@@ -9,6 +9,7 @@ import {
   FaGlobeAmericas,
   FaPencilAlt,
   FaTrash,
+  FaRegCircle,
 } from "react-icons/fa";
 import createToast from "../../Utility/toast";
 import { profileDataUpdate, profileUpdate } from "../../redux/Auth/action";
@@ -17,6 +18,8 @@ import ClickUpdate from "../ClickUpdate/ClickUpdate";
 import PopupFullWidth from "../Popups/PopUpFullWidth/PopupFullWidth";
 import StorySlider from "../StorySlider/StorySlider";
 import { set } from "mongoose";
+import axios from "axios";
+import { FEATURED_IMAGE_UPDATE } from "../../redux/Auth/authType";
 
 const ProfileIntro = () => {
   const dispatch = useDispatch();
@@ -24,7 +27,10 @@ const ProfileIntro = () => {
   const [bioShow, setBioShow] = useState(false);
   const [disable, setDisable] = useState(true);
   const [bio, setBio] = useState(user.bio);
-  const [remain, setRemain] = useState(101 - bio.length);
+  const [remain, setRemain] = useState(
+    101 - (bio.length === 0 ? 0 : bio.length)
+  );
+
   const [details, setDetails] = useState(false);
   const [catShow, setCatShow] = useState(false);
   const [cateData, setCateData] = useState(user.category ? user.category : "");
@@ -50,7 +56,12 @@ const ProfileIntro = () => {
   const [showHide, setShowHide] = useState(false);
 
   const [uploadFeatureShow, setUploadFeatureShow] = useState(false);
- 
+  const [upFeatureColection, setUpFeatureColection] = useState(false);
+
+  const [postImages, setPostImages] = useState([]);
+  const [selected, setSelected] = useState([]);
+  const [collectionTitle, setCollectionTitle] = useState("");
+
   // handle details modals
   const modalHandler = () => {
     setDetails(!details);
@@ -198,45 +209,83 @@ const ProfileIntro = () => {
     setPostImages([]);
   };
 
-
+  // handle featured modal back
+  const handleUploadBack = () => {
+    setUpFeatureColection(false);
+  };
 
   // Hanfle featured iamge preview
 
-  const [postImages, setPostImages] = useState([]);
-  const [selected, setSelected] = useState([])
+  const handlePreview = (e) => {
+    let newImages = e.target.files;
 
-   const handlePreview = (e) => {
-    
-    let newImages = e.target.files
+    let newArray = Array.from(newImages);
 
-    let newArray = Array.from(newImages)
+    setPostImages((prev) => [...prev, ...newArray]);
 
-
-    setPostImages((prev) => ([...prev, ...newArray]))
-
-    setSelected((prev) => ([...prev, ...newArray]))
-
+    setSelected((prev) => [...prev, ...newArray]);
   };
 
   // hanfdle change Items
- 
 
   const handleChangeItems = (e) => {
+    const updateList = [...selected];
 
-        const updateList = [...selected]
+    const val = postImages.find((data) => data.name == e.target.value);
+    if (selected.includes(val)) {
+      updateList.splice(updateList.indexOf(val), 1);
+    } else {
+      updateList.push(val);
+    }
 
-        const val = postImages.find(data => data.name == e.target.value)
-        if(selected.includes(val)){
-           updateList.splice(updateList.indexOf(val), 1)
-        }else{
-          updateList.push(val)
-        }
+    setSelected(updateList);
+    setSelected(updateList);
+  };
+  // hanfle edit featured image modal
+  const hadleEditUploadPhtos = (e) => {
+    e.preventDefault();
+    if (postImages.length === 0) {
+      return alert("Please Upload Featured Images");
+    } else {
+      setUpFeatureColection(true);
+    }
+  };
 
-      setSelected(updateList)
-      setSelected(updateList)
+  const handleCollectionTitle = (e) => {
+    setCollectionTitle(e.target.value);
+  };
 
-  }
+  // Handle featured slider items upload
+  const handleFeaturedSliders = () => {
+    const data = new FormData();
+    data.append("name", collectionTitle);
+    selected.forEach((items) => {
+      data.append("slider", items);
+    });
 
+    axios.put(
+      `http://localhost:5050/api/v1/user/featured-slider/${user._id}`,
+      data
+    ).then(res => {
+      setSelected([])
+      setUpFeatureColection(false)
+      setUploadFeatureShow(false)
+      setShowHide(false)
+      dispatch({
+        type : FEATURED_IMAGE_UPDATE,
+        payload : res.data.user
+      })
+    }).catch(err =>{
+        console.log(err);
+    });
+  };
+  const [sliderIndex, setSliderIndex] = useState([]);
+  const handleFeaturedSlider = (e, items, id) => {
+    e.preventDefault();
+
+    setShowHide(!showHide);
+    setSliderIndex(user.featured[id].sliders);
+  };
 
   return (
     <FbCard>
@@ -648,23 +697,33 @@ const ProfileIntro = () => {
       {/* Features Card */}
       <div className="featured-card-wrapper">
         <div className="feature-items-wrapper">
-          <div className="featured-item-wrapper">
-            <div
-              className="featured-items"
-              onClick={() => setShowHide(!showHide)}
-            >
-              <div className="item-img-wrapper">
-                <img src={flower} alt="" />
-                <p className="counter">+3</p>
-              </div>
-              <p>Collection</p>
-            </div>
-          </div>
+          {user.featured &&
+            user.featured.map((item, index) => {
+                return  <div className="featured-item-wrapper">
+                <div
+                  key={index}
+                  className="featured-items"
+                  onClick={(e) => handleFeaturedSlider(e, item, index)}
+                >
+                  <div className="item-img-wrapper">
+                    <img
+                      src={`http://127.0.0.1:5050/sliders/${item.sliders[0]}`}
+                      alt=""
+                    />
+                    <p className="counter">+3</p>
+                  </div>
+                  <p>{item.name}</p>
+                </div>
+              </div>;
+            })}
         </div>
         {showHide && (
-          <PopupFullWidth hide={setShowHide}>
+          <PopupFullWidth hide={setShowHide} sliderIndex={sliderIndex}>
             <div className="popup-story-slider">
-              <StorySlider hidePopup={setShowHide}></StorySlider>
+              <StorySlider
+                data={sliderIndex}
+                hidePopup={setShowHide}
+              ></StorySlider>
             </div>
           </PopupFullWidth>
         )}
@@ -725,34 +784,131 @@ const ProfileIntro = () => {
                     <div className="featured-preview">
                       {postImages &&
                         postImages.map((item, index) => {
+                          let imgUrl = URL.createObjectURL(item);
 
-
-                        let imgUrl = URL.createObjectURL(item)
-
-                         return  <label htmlFor={`checked-${index}`} key={index}>
-                         <div
-                           className="featured-preview-item"
-                           style={{ backgroundImage: `url(${imgUrl})` }}
-                         >
-                           <input 
-                           type="checkbox" 
-                           id={`checked-${index}`} 
-                           checked={selected.includes(item)}  
-                            onChange={handleChangeItems} 
-                            value={item.name} 
-                            />
-                           <div className="container checked-icon">
-                             <div className="round">
-                               <FaCheckCircle style={{fontSize:'18px', color:'#ffff'}}/>
-                             </div>
-                           </div>
-                         </div>
-                       </label>
+                          return (
+                            <label htmlFor={`checked-${index}`} key={index}>
+                              <div
+                                className="featured-preview-item"
+                                style={{ backgroundImage: `url(${imgUrl})` }}
+                              >
+                                <input
+                                  type="checkbox"
+                                  id={`checked-${index}`}
+                                  checked={selected.includes(item)}
+                                  onChange={handleChangeItems}
+                                  value={item.name}
+                                  hidden
+                                  className="feature-preview-images"
+                                />
+                                <div className="container checked-icon">
+                                  <div className="round">
+                                    {selected.includes(item) && (
+                                      <FaCheckCircle
+                                        className="icon-checked checked-icon"
+                                        style={{
+                                          fontSize: "18px",
+                                          color: "#ffff",
+                                        }}
+                                      />
+                                    )}
+                                    {!selected.includes(item) && (
+                                      <FaRegCircle
+                                        className="icon-unchecked checked-icon"
+                                        style={{
+                                          fontSize: "18px",
+                                          color: "#ffff",
+                                        }}
+                                      />
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </label>
+                          );
                         })}
                     </div>
                   </div>
                   <div className="featured-upload-btn">
-                    <button>Next</button>
+                    <button onClick={hadleEditUploadPhtos}>Next</button>
+                  </div>
+                </div>
+              </FbModal>
+            )}
+            {upFeatureColection && (
+              <FbModal
+                title={"Edit Featured Collection"}
+                uploadFeatured={upFeatureColection}
+                closmodal={() => setUpFeatureColection(false)}
+                handleBackBtn={handleUploadBack}
+              >
+                {/* Featured Modal Content */}
+                <div className="featured-contentwrapper-upload">
+                  <div className="editFeaturedUpload-wrapper">
+                    <div className="collection-wrap">
+                      <div className="colverImg">
+                        <img src={URL.createObjectURL(postImages[0])} alt="" />
+                      </div>
+                      <div className="collection-title">
+                        <input
+                          type="text"
+                          placeholder="collection Name"
+                          value={collectionTitle}
+                          onChange={handleCollectionTitle}
+                        />
+                      </div>
+                    </div>
+                    <hr />
+                    <div className="featured-preview">
+                      {postImages &&
+                        postImages.map((item, index) => {
+                          let imgUrl = URL.createObjectURL(item);
+
+                          return (
+                            <label htmlFor={`checked-${index}`} key={index}>
+                              <div
+                                className="featured-preview-item"
+                                style={{ backgroundImage: `url(${imgUrl})` }}
+                              >
+                                <input
+                                  type="checkbox"
+                                  id={`checked-${index}`}
+                                  checked={selected.includes(item)}
+                                  onChange={handleChangeItems}
+                                  value={item.name}
+                                  hidden
+                                  className="feature-preview-images"
+                                />
+                                <div className="container checked-icon">
+                                  <div className="round">
+                                    {selected.includes(item) && (
+                                      <FaCheckCircle
+                                        className="icon-checked checked-icon"
+                                        style={{
+                                          fontSize: "18px",
+                                          color: "#ffff",
+                                        }}
+                                      />
+                                    )}
+                                    {!selected.includes(item) && (
+                                      <FaRegCircle
+                                        className="icon-unchecked checked-icon"
+                                        style={{
+                                          fontSize: "18px",
+                                          color: "#ffff",
+                                        }}
+                                      />
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </label>
+                          );
+                        })}
+                    </div>
+                  </div>
+                  <div className="featured-upload-btn">
+                    <button onClick={handleFeaturedSliders}>Upload</button>
                   </div>
                 </div>
               </FbModal>

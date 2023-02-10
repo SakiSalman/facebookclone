@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+
 import createError from "../utility/createError.js";
 import { hasPassword } from "../utility/hasPassword.js";
 import { verification_code } from "../utility/math.js";
@@ -61,6 +62,7 @@ export const register = async (req, res, next) => {
       }
     } else if (mobile) {
       mobileData = auth;
+
       // check user with mobile
       const mobileUser = await User.findOne({ mobile: auth });
 
@@ -102,7 +104,7 @@ export const register = async (req, res, next) => {
       username: username,
       email: emailData,
       mobile: mobileData,
-      password: hasPassword(password),
+      password: await hasPassword(password),
       gander,
       birth_date,
       birth_month,
@@ -146,7 +148,6 @@ export const register = async (req, res, next) => {
   } catch (error) {
     next(error);
     console.log(error);
-    res.send("hello");
   }
 };
 
@@ -700,10 +701,58 @@ export const updateUsers = async (req, res, next) => {
   try {
     const { id } = req.params;
     const data = req.body;
-    console.log(req.body);
     const user = await User.findByIdAndUpdate(id, data, {
       new: true,
     });
+
+    if (user) {
+      return res.status(200).json({
+        user: user,
+        message: "Profile Updated Successfully.",
+      });
+    } else {
+      return next(createError(400, "Profile Update Failed."));
+    }
+  } catch (error) {
+    return next(error);
+  }
+};
+
+/**
+ * @access Privet
+ * @method Patch
+ * @route /updateFeatured Slider
+ * @Purpose Update User Data
+ */
+
+export const addFeaturedSlider = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const data = req.files;
+    const name = req.body;
+
+    console.log(name.name);
+    const sliders = [];
+    data.forEach((imgs) => {
+      sliders.push(imgs.filename);
+    });
+
+    const { featured } = await User.findById(id);
+    const user = await User.findByIdAndUpdate(
+      id,
+      {
+        featured: [
+          ...featured,
+          {
+            name: name.name,
+            sliders,
+          },
+        ],
+      },
+      {
+        new: true,
+      }
+    );
 
     if (user) {
       return res.status(200).json({

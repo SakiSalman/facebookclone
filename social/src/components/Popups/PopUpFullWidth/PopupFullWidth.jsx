@@ -3,7 +3,10 @@ import './popupfullwidth.css'
 import cross from '../../../_assets/icons/cross.png'
 import UserMenu from '../../UserMenu/UserMenu'
 
-const PopupFullWidth = ({children, hide}) => {
+const PopupFullWidth = ({children, hide,  sliderIndex}) => {
+
+    
+
   return (
     <>
     

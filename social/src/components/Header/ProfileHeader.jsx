@@ -24,7 +24,7 @@ const ProfileHeader = () => {
             <Avatar/>
           </div>
           <div className="profile-desc">
-            <h1>{user.first_name} {user.sur_name} <span>( neooo inc )</span></h1>
+            <h1>{user.first_name + user.sur_name} <span>( neooo inc )</span></h1>
             <div className="profile-follow-details">
               <span className="profile-followers">15k follower</span>
               <span className="profile-following">1k following</span>

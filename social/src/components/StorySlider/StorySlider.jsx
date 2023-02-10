@@ -6,30 +6,30 @@ import './StorySlider.css'
 import { featuredItems } from '../../Fackers/featured';
 import { useEffect } from 'react';
 
-const StorySlider = ({hidePopup}) => {
+const StorySlider = ({hidePopup, data}) => {
 
   const [indexItem, setIndexItem] = useState(0)
 
-
+  let image = data[indexItem]
   useEffect(()=>{
 
-
-    
     let SetTimeOut = setTimeout(() => {
 
-      if (indexItem <= featuredItems.length) {
+      if (indexItem <= data.length) {
         setIndexItem(indexItem + 1)
       }
-      if (indexItem === (featuredItems.length - 1)) {
+      if (indexItem === (data.length - 1)) {
         hidePopup(false)
       }
     }, 3000);
     return () => clearTimeout(SetTimeOut)
+
+
   },[indexItem])
   // handle slider next
 const handleSliderNext = (e) => {
   e.preventDefault()
-  setIndexItem(((indexItem + 1)%featuredItems.length))
+  setIndexItem(((indexItem + 1)%data.length))
 }
   return (
     <>
@@ -38,7 +38,7 @@ const handleSliderNext = (e) => {
     <div className="slider-bars">
       
       {
-        featuredItems.map((item, index)=>
+        data.map((item, index)=>
 
            <div className="bars" key={index} >
             <div className={`progress ${index < (indexItem + 1)? 'viewed' : ''} ` }></div>
@@ -58,7 +58,11 @@ const handleSliderNext = (e) => {
       </div>
     </div>
     </div>
-    <div className="slider-item-wrap" style={{backgroundImage: `url(${featuredItems[indexItem].photo})`}}>
+    <div className="slider-item-wrap">
+
+      <img style={{width:'100%', height:'100%',
+    objectFit:'cover'}} src={`http://127.0.0.1:5050/sliders/${data[indexItem]}`} alt="" />
+       
          
     </div>
 

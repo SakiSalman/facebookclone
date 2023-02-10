@@ -13,7 +13,7 @@ const Profile = () => {
       <ProfileHeader />
       {/* Prfile Body */}
 
-      <div class="fb-profile-body">
+      <div className="fb-profile-body">
         <div className="user-profile-info-wrappper">
           <div className="profile-personal-info">
 

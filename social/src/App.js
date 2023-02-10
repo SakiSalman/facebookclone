@@ -44,7 +44,7 @@ function App() {
         onLoaderFinished={() => dispatch({ type: LOADER_END })}
       />
       <ToastContainer
-        zIndex="99999"
+        zIndex="999999999 !important"
         position="top-center"
         autoClose={3000}
         hideProgressBar={true}

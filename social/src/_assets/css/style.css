@@ -2215,10 +2215,12 @@ button.back-btn-featured {
 
 .featured-preview .checked-icon {
   position: absolute;
-  bottom: 0;
+  bottom: 5px;
   right: 10px;
 
 }
+
+
 
 .featured-contentwrapper-upload button {
   display: inline-block;
@@ -2233,4 +2235,43 @@ button.back-btn-featured {
 .featured-upload-btn button {
   width: 150px;
   background-color: #abd3f9;
+}
+
+.editFeaturedUpload-wrapper {
+  padding: 20px 30px;
+}
+
+.collection-wrap {
+  text-align: center;
+}
+
+.colverImg {
+  width: 128px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin: auto;
+
+}
+
+.colverImg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.collection-title {
+  padding: 10px 0;
+}
+
+.collection-title input {
+  outline: none;
+  padding: 10px 5px;
+  border-radius: 5px;
+  border: 1px solid #cdcaca;
+}
+
+.editFeaturedUpload-wrapper .featured-preview {
+  padding: 20px 0px;
 }
