@@ -13,6 +13,7 @@ import {
   getUser,
   updateUsers,
   addFeaturedSlider,
+  editFeaturedData,
 } from "../controllers/userController.js";
 
 const __dirname = path.resolve();
@@ -43,6 +44,7 @@ router.post("/activation/:token/activated", activateUser);
 router.post("/forgot-password", forgotPassword);
 router.put("/update-data/:id", updateUsers);
 router.put("/featured-slider/:id", slider, addFeaturedSlider);
+router.patch("/edit-featured-slider/:id", editFeaturedData);
 router.get("/me", loggedInUser);
 
 // export default router
