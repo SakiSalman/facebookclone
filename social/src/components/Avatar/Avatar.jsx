@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import avatars from '../../_assets/images/avatar.jpg'
 
 
-const Avatar = () => {
+const Avatar = ({url}) => {
     const {user} = useSelector(state => state.auth)
 
     const displayAvatar = () => {

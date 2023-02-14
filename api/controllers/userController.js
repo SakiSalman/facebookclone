@@ -731,6 +731,8 @@ export const addFeaturedSlider = async (req, res, next) => {
     const data = req.files;
     const name = req.body;
 
+    console.log(data);
+
     console.log(name.name);
     const sliders = [];
     data.forEach((imgs) => {
@@ -781,16 +783,14 @@ export const editFeaturedData = async (req, res, next) => {
     const data = req.body;
 
     const { featured } = await User.findById(id);
-
     const user = await User.findByIdAndUpdate(
       id,
       {
         featured: [
-          ...featured,
-          {
+          (featured[data.sliderId] = {
             ...featured[data.sliderId],
-            sliders: data.sliders,
-          },
+            sliders: data.sliders.sliders,
+          }),
         ],
       },
       {
@@ -807,6 +807,7 @@ export const editFeaturedData = async (req, res, next) => {
       return next(createError(400, "Profile Update Failed."));
     }
   } catch (error) {
+    console.log(error);
     return next(error);
   }
 };

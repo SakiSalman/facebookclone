@@ -675,14 +675,13 @@ Components
 .create-post .create-post-header img {
   width: 40px;
   height: 40px;
-  border-radius: 50%;
   cursor: pointer;
 }
 
 .create-post .create-post-header button {
   height: 40px;
   width: 93%;
-  text-align-last: left;
+  text-align: left;
   cursor: pointer;
   background-color: #f0f2f5;
   border: 1px solid #f0f2f5;
@@ -691,6 +690,26 @@ Components
   font-family: inherit;
   font-size: 18px;
   color: #65676b;
+}
+
+.create-post .create-post-header button#close {
+  height: 40px;
+  width: 40px;
+  color: #65676b;
+  position: absolute;
+  top: 14px;
+  right: 11px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.create-post .create-post-header button#close img {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  cursor: pointer;
+
 }
 
 .create-post .create-post-header button:hover {
@@ -2335,3 +2354,191 @@ button.back-btn-featured {
   font-size: 15px;
   font-weight: 600;
 }
+
+
+/* Profile Post Create */
+
+.create-post-wrapper {
+  padding: 20px;
+}
+
+.create-post-user-info {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-info-box h5 {
+  font-size: 18px;
+  color: #484848;
+}
+
+.user-info-box p {
+  display: flex;
+  align-items: center;
+}
+
+.user-info-box span:nth-child(1) {
+  font-size: 15px;
+}
+
+.pricacy-area {
+  padding: 4px;
+  background-color: #ddd;
+  border-radius: 30px;
+}
+
+.pricacy-area span:nth-child(1) {
+  display: flex;
+  align-items: center;
+}
+
+.user-info-box {
+  margin-bottom: 10px;
+}
+
+.create-post-text-area {
+  width: 100%;
+
+}
+
+.create-post-text-area textarea {
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 10px;
+}
+
+.create-post-text-area textarea::placeholder {
+
+  font-size: 30px;
+
+}
+
+.create-post-imoji-area {
+  text-align: right;
+  font-size: 30px;
+  color: #adadaddd;
+  transition: .3s ease;
+  cursor: pointer;
+}
+
+.create-post-imoji-area svg:hover {
+  color: #f0a92ddd;
+}
+
+.pricacy-area {
+  padding: 4px;
+  background-color: #ddd;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  font-size: 12px;
+}
+
+.create-post-button .post-btn {
+  border-radius: 5px !important;
+  margin: auto !important;
+  text-align: center !important;
+  width: 100% !important;
+}
+
+.create-post-button .post-btn:hover {
+  background-color: #388ceb !important;
+  color: #fff;
+}
+
+.create-post-post-type-wrapper {
+  border: 1px solid #ddd;
+  padding: 20px 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.create-post-type-title p {
+  font-size: 20px;
+  color: #000;
+}
+
+.create-post-type-icons {
+  display: flex;
+  gap: 8px;
+}
+
+.create-post-type-icons img {
+  width: 25px !important;
+  height: 25px !important;
+  object-fit: cover !important;
+  border-radius: 0 !important;
+}
+
+.photo-upload-area {
+  text-align: center;
+  background-color: #ffff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 8px;
+  overflow: auto;
+  max-height: 266px;
+  position: relative;
+
+}
+
+.post-img-upload-wrapper {
+  background-color: #f4f4f4;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  cursor: pointer;
+  min-height: 240px;
+
+}
+
+.post-img-upload-wrapper .up-bg {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #bdbaba;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.post-img-upload-wrapper .up-bg img {
+  width: 25px !important;
+  height: 25px !important;
+  filter: grayscale(100%) !important;
+}
+
+.create-post .create-post-header button#close-up {
+  height: 40px;
+  width: 40px;
+  color: #65676b;
+  position: absolute;
+  top: 14px;
+  right: 11px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  box-shadow: 0px 0px 10px #ddd;
+}
+
+.create-post .create-post-header button#close-up img {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  cursor: pointer;
+
+}
+
+/* Profile Post End */

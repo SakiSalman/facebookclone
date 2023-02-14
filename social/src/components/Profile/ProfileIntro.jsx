@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import FbCard from "../Fb-card/FbCard";
 import wave from "../../_assets/icons/wave.png";
-import flower from "../../_assets/images/flower.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import {
   FaCheckCircle,
@@ -14,13 +13,11 @@ import {
   FaPen,
   FaPenFancy,
 } from "react-icons/fa";
-import createToast from "../../Utility/toast";
-import { profileDataUpdate, profileUpdate } from "../../redux/Auth/action";
+import { profileDataUpdate } from "../../redux/Auth/action";
 import FbModal from "../Modal/FbModal";
 import ClickUpdate from "../ClickUpdate/ClickUpdate";
 import PopupFullWidth from "../Popups/PopUpFullWidth/PopupFullWidth";
 import StorySlider from "../StorySlider/StorySlider";
-import { set } from "mongoose";
 import axios from "axios";
 import { FEATURED_IMAGE_UPDATE } from "../../redux/Auth/authType";
 
@@ -280,6 +277,8 @@ const ProfileIntro = () => {
         type : FEATURED_IMAGE_UPDATE,
         payload : res.data.user
       })
+      console.log(res.data);
+
     }).catch(err =>{
         console.log(err);
     });
@@ -829,22 +828,20 @@ const ProfileIntro = () => {
                     }
 
                     {
-                      !user.featured &&  <>
-                      <img
-                      src="https://i.ibb.co/f2v2yVk/Screenshot-3.png"
-                      alt="Screenshot-3"
-                      border="0"
-                    />
-                    <p>
-                      Features your favurite photos and stories to show all of
-                      your friends!
-                    </p>
-                    </>
+                      user.featured.length === 0 &&  <>
+                          <div className="featured-upload-empty-wrap" style={{margin:'auto'}}>
+                              <img
+                              src="https://i.ibb.co/f2v2yVk/Screenshot-3.png"
+                              alt="Screenshot-3"
+                              border="0"
+                            />
+                            <p>
+                              Features your favurite photos and stories to show all of
+                              your friends!
+                            </p>
+                          </div>
+                      </>
                     }
-
-
-
-                   
                   </div>
 
                   <button onClick={() => setUploadFeatureShow(true)}>
@@ -886,50 +883,54 @@ const ProfileIntro = () => {
                       editSelected.sliders.map((item, index) => {
 
 
-                       
-                       
-                        return (
-                          <label htmlFor={`checked-${index}`} key={index}>
-                            <div
-                              className="featured-preview-item"
-                              style={{backgroundImage:`url(/sliders/${item}))`}}
-                            >
-                             
-                              <input
-                                type="checkbox"
-                                id={`checked-${index}`}
-                                checked={editSelected.sliders.includes(item)}
-                                onChange={handleEditUpdate}
-                                value={item}
-                                hidden
-                                className="feature-preview-images"
-                              />
-                              <div className="container checked-icon">
-                                <div className="round">
-                                  {editSelected.sliders.includes(item) && (
-                                    <FaCheckCircle
-                                      className="icon-checked checked-icon"
-                                      style={{
-                                        fontSize: "18px",
-                                        color: "#ffff",
-                                      }}
-                                    />
-                                  )}
-                                  {!editSelected.sliders.includes(item) && (
-                                    <FaRegCircle
-                                      className="icon-unchecked checked-icon"
-                                      style={{
-                                        fontSize: "18px",
-                                        color: "#ffff",
-                                      }}
-                                    />
-                                  )}
-                                </div>
-                              </div>
+                        let urlLink = `/sliders/${item}`
+
+                        return <label htmlFor={`checked-${index}`} key={index}>
+                        <div
+                          className="featured-preview-item"
+                          style={{backgroundImage: `url(${urlLink})`}}
+                        >
+                         
+                          <input
+                            type="checkbox"
+                            id={`checked-${index}`}
+                            checked={editSelected.sliders.includes(item)}
+                            onChange={handleEditUpdate}
+                            value={item}
+                            hidden
+                            className="feature-preview-images"
+                          />
+                          <div className="container checked-icon">
+                            <div className="round">
+                              {editSelected.sliders.includes(item) && (
+                                <FaCheckCircle
+                                  className="icon-checked checked-icon"
+                                  style={{
+                                    fontSize: "18px",
+                                    color: "#ffff",
+                                  }}
+                                />
+                              )}
+                              {!editSelected.sliders.includes(item) && (
+                                <FaRegCircle
+                                  className="icon-unchecked checked-icon"
+                                  style={{
+                                    fontSize: "18px",
+                                    color: "#ffff",
+                                  }}
+                                />
+                              )}
                             </div>
-                          </label>
-                        );
-                      })}
+                          </div>
+  
+                         
+                        </div>
+                      </label>
+                      }
+                      
+                      
+                      
+                      )}
                   </div>
                 </div>
                 <div className="featured-upload-btn">

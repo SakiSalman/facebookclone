@@ -12,9 +12,13 @@ const FbModal = ({children, title, closmodal, uploadFeatured, handleBackBtn }) =
     
                     <div className="fb-modal-header">
                         <span>{title}</span>
+                        
 
                         {
-                          !uploadFeatured &&  <button onClick={closmodal}><img src={cross} alt="" /></button>
+                          closmodal && <button id='close' onClick={closmodal}><img src={cross} alt="" /></button>
+                        }
+                        {
+                          !uploadFeatured && !closmodal  &&  <button id='close' onClick={closmodal}><img src={cross} alt="" /></button>
                         
                         }
                          {

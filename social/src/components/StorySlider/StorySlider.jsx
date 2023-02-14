@@ -20,7 +20,7 @@ const StorySlider = ({hidePopup, data}) => {
       if (indexItem === (data.length - 1)) {
         hidePopup(false)
       }
-    }, 3000);
+    }, 5000);
     return () => clearTimeout(SetTimeOut)
 
 
@@ -30,6 +30,12 @@ const handleSliderNext = (e) => {
   e.preventDefault()
   setIndexItem(((indexItem + 1)%data.length))
 }
+
+// make image link
+let urlLink = `/sliders/${data[indexItem]}`
+
+console.log(indexItem);
+
   return (
     <>
     <div className="story-slider-wrapper">
@@ -57,10 +63,10 @@ const handleSliderNext = (e) => {
       </div>
     </div>
     </div>
-    <div className="slider-item-wrap">
-
-      <img style={{width:'100%', height:'100%',
-    objectFit:'cover'}} src={`/sliders/${data[indexItem]}`} alt="" />
+    <div className="slider-item-wrap" style={{backgroundImage: `url(${urlLink})`}}>
+      
+      {/* <img style={{width:'100%', height:'100%',
+    objectFit:'cover'}} src={`/sliders/${data[indexItem]}`} alt="" /> */}
        
          
     </div>
