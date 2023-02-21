@@ -728,16 +728,8 @@ export const updateUsers = async (req, res, next) => {
 export const addFeaturedSlider = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const data = req.files;
-    const name = req.body;
-
+    const data = req.body;
     console.log(data);
-
-    console.log(name.name);
-    const sliders = [];
-    data.forEach((imgs) => {
-      sliders.push(imgs.filename);
-    });
 
     const { featured } = await User.findById(id);
     const user = await User.findByIdAndUpdate(
@@ -746,8 +738,8 @@ export const addFeaturedSlider = async (req, res, next) => {
         featured: [
           ...featured,
           {
-            name: name.name,
-            sliders,
+            name: data.collection,
+            sliders: data.slider,
           },
         ],
       },
@@ -780,18 +772,19 @@ export const editFeaturedData = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const data = req.body;
+    const { sliderId, sliders } = req.body;
 
     const { featured } = await User.findById(id);
+    // let newData = (featured[sliderId] = {
+    //   ...featured[sliderId],
+    //   sliders: ["hello2"],
+    // });
+    console.log(featured[sliderId]);
+
     const user = await User.findByIdAndUpdate(
       id,
       {
-        featured: [
-          (featured[data.sliderId] = {
-            ...featured[data.sliderId],
-            sliders: data.sliders.sliders,
-          }),
-        ],
+        featured: [(featured[sliderId] = sliders)],
       },
       {
         new: true,

@@ -43,7 +43,7 @@ router.post("/otp-activation", activationOTP);
 router.post("/activation/:token/activated", activateUser);
 router.post("/forgot-password", forgotPassword);
 router.put("/update-data/:id", updateUsers);
-router.put("/featured-slider/:id", slider, addFeaturedSlider);
+router.post("/featured-slider/:id", addFeaturedSlider);
 router.patch("/edit-featured-slider/:id", editFeaturedData);
 router.get("/me", loggedInUser);
 

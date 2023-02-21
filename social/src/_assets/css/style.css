@@ -706,10 +706,16 @@ Components
 
 .create-post .create-post-header button#close img {
   width: 25px;
-  height: 25px;
+  height: 25px !important;
   border-radius: 50%;
   cursor: pointer;
 
+}
+
+button#close img {
+  width: 30px;
+  height: 34px;
+  cursor: pointer;
 }
 
 .create-post .create-post-header button:hover {

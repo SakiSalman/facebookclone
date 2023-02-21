@@ -20,8 +20,11 @@ import PopupFullWidth from "../Popups/PopUpFullWidth/PopupFullWidth";
 import StorySlider from "../StorySlider/StorySlider";
 import axios from "axios";
 import { FEATURED_IMAGE_UPDATE } from "../../redux/Auth/authType";
+import PreLoaders from "../preloader/PreLoaders";
 
 const ProfileIntro = () => {
+
+  const [preloader, setPreloader] = useState(false)
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const [bioShow, setBioShow] = useState(false);
@@ -61,6 +64,7 @@ const ProfileIntro = () => {
   const [postImages, setPostImages] = useState([]);
   const [selected, setSelected] = useState([]);
   const [collectionTitle, setCollectionTitle] = useState("");
+  const [images , setImages] = useState([])
 
 
   const [editFeatured, setEditFeatured] = useState(false)
@@ -259,30 +263,64 @@ const ProfileIntro = () => {
 
   // Handle featured slider items upload
   const handleFeaturedSliders = () => {
+
+    setPreloader(!preloader)
     const data = new FormData();
     data.append("name", collectionTitle);
+    let count = 1;
     selected.forEach((items) => {
-      data.append("slider", items);
-    });
+      data.append("file", items);
+      data.append("upload_preset", 'test_upload');
+      data.append("cloud_name", 'dagtq9wgf');
 
-    axios.put(
-      `http://localhost:5050/api/v1/user/featured-slider/${user._id}`,
-      data
-    ).then(res => {
-      setSelected([])
-      setUpFeatureColection(false)
-      setUploadFeatureShow(false)
-      setShowHide(false)
-      dispatch({
-        type : FEATURED_IMAGE_UPDATE,
-        payload : res.data.user
-      })
-      console.log(res.data);
+      axios.post(
+        `https://api.cloudinary.com/v1_1/dagtq9wgf/image/upload`,
+        data
+      ).then(res => {
+        
 
-    }).catch(err =>{
+        setImages((prev)=>([...prev, res.data.url]))
+        if (count >= selected.length) {
+          setPreloader(false)
+         handleSendData()
+        }
+
+        count++
+
+      }).catch(err =>{
         console.log(err);
+      });
     });
+
+    // send image info to database
+
   };
+// send data to database and cloud
+const handleSendData = async () => {
+
+   try {
+      await axios.post(`http://localhost:5050/api/v1/user/featured-slider/${user._id}`, {
+      collection : collectionTitle,
+      slider : images
+    })
+    .then(res => {
+      console.log(res.data);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+   } catch (error) {
+    
+   }
+
+}
+// Call Handle Submit Form handler
+const handleSubmitUpload = (e) => {
+
+  handleFeaturedSliders()
+}
+
+
   const [sliderIndex, setSliderIndex] = useState([]);
   const handleFeaturedSlider = (e, items, id) => {
     e.preventDefault();
@@ -349,6 +387,13 @@ const ProfileIntro = () => {
   }
 
   return (
+
+    <>
+
+    {
+      preloader && <PreLoaders text={'Uploading...'}/>
+    }
+    
     <FbCard>
       <h3>Intro</h3>
       <div className="bio">
@@ -759,7 +804,7 @@ const ProfileIntro = () => {
       <div className="featured-card-wrapper">
         <div className="feature-items-wrapper">
           {user.featured &&
-            user.featured.map((item, index) => {
+            user.featured.slice(0, 3).map((item, index) => {
                 return  <div className="featured-item-wrapper">
                 <div
                   key={index}
@@ -768,7 +813,7 @@ const ProfileIntro = () => {
                 >
                   <div className="item-img-wrapper">
                     <img
-                      src={`http://127.0.0.1:5050/sliders/${item.sliders[0]}`}
+                      src={`${item.sliders[0]}`}
                       alt=""
                     />
                     <p className="counter">+3</p>
@@ -808,21 +853,22 @@ const ProfileIntro = () => {
                   <div className="edit-featured-content-wrap">
                     {
                       user.featured && user.featured.map((items, index)=>{
+                        return  <div className="previous-featured-image-wrapper" onClick={(e)=>handleEditFeaturedModal(e, index)}>
+                            <div className="featured-edit-image-wrapper">
+                                <img src={`${items.sliders[index]}`} alt="" />
+                            </div>
+                            <div className="featured-edit-content">
+                              <div className="main-content-wrap">
+                                <p className="collection-name">{items.name}</p>
+                                <p>{items.sliders.length} Items</p>
+                              </div>
+                              <div className="featured-edit-icon">
+                                <FaPenFancy fill=""/>
+                              </div>
+                            </div>
+                          </div>
                       
-                        return <div className="previous-featured-image-wrapper" onClick={(e)=>handleEditFeaturedModal(e, index)}>
-                        <div className="featured-edit-image-wrapper">
-                            <img src={`/sliders/${items.sliders[index]}`} alt="" />
-                        </div>
-                        <div className="featured-edit-content">
-                          <div className="main-content-wrap">
-                            <p className="collection-name">{items.name}</p>
-                            <p>{items.sliders.length} Items</p>
-                          </div>
-                          <div className="featured-edit-icon">
-                            <FaPenFancy fill=""/>
-                          </div>
-                        </div>
-                      </div>
+                       
                       })
                       
                     }
@@ -1096,7 +1142,7 @@ const ProfileIntro = () => {
                     </div>
                   </div>
                   <div className="featured-upload-btn">
-                    <button onClick={handleFeaturedSliders}>Upload</button>
+                    <button onClick={handleSubmitUpload}>Upload</button>
                   </div>
                 </div>
               </FbModal>
@@ -1105,6 +1151,7 @@ const ProfileIntro = () => {
         }
       </div>
     </FbCard>
+    </>
   );
 };
 
