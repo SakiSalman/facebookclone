@@ -8,12 +8,13 @@ import ProfilePhotoUpload from './ProfilePhotoUpload';
 
 
 const CoverDetails = () => {
+  
     const {user} = useSelector(state => state.auth)
     const [uploadPopUp, setUploadPopUp] = useState(false)
     
     
     // handle details modals
-  const modalHandler = () => {
+  const modalHandler = (e) => {
     setUploadPopUp(!uploadPopUp);
   };
 
@@ -23,7 +24,7 @@ const CoverDetails = () => {
         <div className="profile-info">
           <div className="profile-photo">
             <Avatar/>
-            <div className="camera-icons" onClick={() => setUploadPopUp(!uploadPopUp)}>
+            <div className="camera-icons" onClick={modalHandler}>
                 <FaCamera/>
             </div>
           </div>
@@ -101,7 +102,7 @@ const CoverDetails = () => {
             {/* Profile Photo Upload Popup Start */}
 
                 {
-                    !uploadPopUp && 
+                    uploadPopUp && 
                     <FbModal 
                     title={"Update profile picture"} 
                     closmodal={modalHandler}
