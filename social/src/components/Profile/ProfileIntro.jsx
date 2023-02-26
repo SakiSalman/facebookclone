@@ -853,7 +853,7 @@ const handleSubmitUpload = (e) => {
                   <div className="edit-featured-content-wrap">
                     {
                       user.featured && user.featured.map((items, index)=>{
-                        return  <div className="previous-featured-image-wrapper" onClick={(e)=>handleEditFeaturedModal(e, index)}>
+                        return  <div className="previous-featured-image-wrapper" onClick={(e)=>handleEditFeaturedModal(e, index)} key={index}>
                             <div className="featured-edit-image-wrapper">
                                 <img src={`${items.sliders[index]}`} alt="" />
                             </div>
