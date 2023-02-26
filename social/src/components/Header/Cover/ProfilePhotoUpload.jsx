@@ -7,7 +7,7 @@ import { useCallback } from 'react'
 import getCroppedImg from '../../../Utility/cropImage'
 import { photoUpdate } from '../../../redux/Auth/action';
 
-const ProfilePhotoUpload = () => {
+const ProfilePhotoUpload = ({close}) => {
 
     const dispatch = useDispatch()
     const { user } = useSelector((state) => state.auth);    
@@ -37,8 +37,10 @@ const ProfilePhotoUpload = () => {
         rotation
       )
       setCroppedImage(croppedImage)
-      setInputImage(croppedImage)
       setCrop({ x: 0, y: 0 })
+      setInputImage(croppedImage)
+      setZoom(1)
+
     } catch (e) {
       console.error(e)
     }
@@ -64,7 +66,10 @@ const ProfilePhotoUpload = () => {
 
         data.append('profile', objectImage)
 
-        dispatch(photoUpdate(data, user._id))
+        dispatch(photoUpdate(data, user._id, close))
+
+        
+
     }catch (err) {
       console.error(e)
     }
