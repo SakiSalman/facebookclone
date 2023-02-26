@@ -804,3 +804,40 @@ export const editFeaturedData = async (req, res, next) => {
     return next(error);
   }
 };
+/**
+ * @access Privet
+ * @method Patch
+ * @route /Profile Images
+ * @Purpose Update User Data
+ */
+
+export const updateProfilePhoto = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const photo = req.file;
+
+    const user = await User.findById(id);
+
+    const UpdateUser = await User.findByIdAndUpdate(
+      id,
+      {
+        profile_photo: photo.filename,
+      },
+      {
+        new: true,
+      }
+    );
+
+    if (user) {
+      return res.status(200).json({
+        user: UpdateUser,
+        message: "Profile Updated Successfully.",
+      });
+    } else {
+      return next(createError(400, "Profile Update Failed."));
+    }
+  } catch (error) {
+    console.log(error);
+    return next(error);
+  }
+};
