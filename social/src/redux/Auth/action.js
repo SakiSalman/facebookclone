@@ -313,3 +313,29 @@ export const profileDataUpdate =
       createToast("error", error.response.data.message);
     }
   };
+// Profile Photo Update
+
+export const photoUpdate =
+  (data, id, setClose = null) =>
+  async (dispatch) => {
+    console.log(data);
+    try {
+      await axios
+        .put(`/api/v1/user/update-profile-photo/${id}`, data)
+        .then((res) => {
+          createToast("success", res.data.message);
+          setClose && setClose(false);
+          dispatch({
+            type: USER_PROFILE_UPDATE,
+            payload: res.data.user,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          createToast("warn", err.response.data.message);
+        });
+    } catch (error) {
+      console.log(error);
+      createToast("error", error.response.data.message);
+    }
+  };
