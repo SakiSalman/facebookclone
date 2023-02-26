@@ -12,7 +12,7 @@ const Avatar = ({url}) => {
       } 
 
       if(user){
-        return user.profile_photo ? <img src={`/${user.profile_photo}`} alt="" /> : <img src={avatars}/>
+        return user.profile_photo ? <img src={`/profile/${user.profile_photo}`} alt="" /> : <img src={avatars}/>
       }
     }
   return (
