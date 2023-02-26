@@ -13,6 +13,8 @@ import {
   TOKEN_FAILED,
   TOKEN_REQ,
   TOKEN_SUCCESS,
+  USER_PROFILE_COVER,
+  USER_PROFILE_PHOTO,
   USER_PROFILE_UPDATE,
 } from "./authType";
 
@@ -326,7 +328,33 @@ export const photoUpdate =
           createToast("success", res.data.message);
           setClose && setClose(false);
           dispatch({
-            type: USER_PROFILE_UPDATE,
+            type: USER_PROFILE_PHOTO,
+            payload: res.data.user,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          createToast("warn", err.response.data.message);
+        });
+    } catch (error) {
+      console.log(error);
+      createToast("error", error.response.data.message);
+    }
+  };
+// cover Photo Update
+
+export const coverPhotoUpdate =
+  (data, id, setClose = null) =>
+  async (dispatch) => {
+    console.log(data);
+    try {
+      await axios
+        .put(`/api/v1/user/update-profile-cover/${id}`, data)
+        .then((res) => {
+          createToast("success", res.data.message);
+          setClose && setClose(false);
+          dispatch({
+            type: USER_PROFILE_COVER,
             payload: res.data.user,
           });
         })

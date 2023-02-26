@@ -10,6 +10,7 @@ import {
   TOKEN_FAILED,
   TOKEN_REQ,
   TOKEN_SUCCESS,
+  USER_PROFILE_COVER,
   USER_PROFILE_PHOTO,
   USER_PROFILE_UPDATE,
 } from "./authType.js";
@@ -96,6 +97,13 @@ const AuthReducer = (state = inititalState, { type, payload }) => {
         },
       };
     case USER_PROFILE_PHOTO:
+      return {
+        ...state,
+        user: {
+          ...payload,
+        },
+      };
+    case USER_PROFILE_COVER:
       return {
         ...state,
         user: {
