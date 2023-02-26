@@ -676,6 +676,7 @@ Components
   width: 40px;
   height: 40px;
   cursor: pointer;
+  border-radius: 100%;
 }
 
 .create-post .create-post-header button {
@@ -2374,6 +2375,7 @@ button.back-btn-featured {
   align-items: center;
   gap: 10px;
 }
+
 
 .user-info-box h5 {
   font-size: 18px;

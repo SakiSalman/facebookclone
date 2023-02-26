@@ -1,17 +1,20 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Avatar from '../../Avatar/Avatar'
 import { FaCamera } from "react-icons/fa";
 import './ProfileDetails.css'
 import FbModal from '../../Modal/FbModal';
 import ProfilePhotoUpload from './ProfilePhotoUpload';
+import ProfileImageDropdown from './ProfileImageDropdown';
+import usePopupClose from '../../../hooks/usePopupClose';
 
 
 const CoverDetails = () => {
   
     const {user} = useSelector(state => state.auth)
     const [uploadPopUp, setUploadPopUp] = useState(false)
-    
+    const [showDrop , setShowDrop] = useState(false)
+
     
     // handle details modals
   const modalHandler = (e) => {
@@ -22,8 +25,13 @@ const CoverDetails = () => {
     <>
         <div className="fb-profile-details">
         <div className="profile-info">
-          <div className="profile-photo">
+          <div className="profile-photo" onClick={(e) => setShowDrop(!showDrop)}>
             <Avatar/>
+
+            {
+              showDrop && <ProfileImageDropdown setUploadPopup={setUploadPopUp}/>
+            }
+
             <div className="camera-icons" onClick={modalHandler}>
                 <FaCamera/>
             </div>
@@ -108,7 +116,7 @@ const CoverDetails = () => {
                     closmodal={modalHandler}
                     >
 
-                    <ProfilePhotoUpload/>
+                    <ProfilePhotoUpload close={modalHandler}/>
 
                     </FbModal>
                 }
