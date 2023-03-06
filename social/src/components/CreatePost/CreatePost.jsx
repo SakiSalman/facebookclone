@@ -17,7 +17,7 @@ const CreatePost = () => {
     <>
                   <div className="create-post">
             <div className="create-post-header">
-              <Avatar/>
+              <Avatar />
               <button onClick={() => setOpenPostPopup(!openPostPopup)}>What's on your mind ?</button>
 
               {

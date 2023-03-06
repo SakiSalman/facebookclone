@@ -693,17 +693,7 @@ Components
   color: #65676b;
 }
 
-.create-post .create-post-header button#close {
-  height: 40px;
-  width: 40px;
-  color: #65676b;
-  position: absolute;
-  top: 14px;
-  right: 11px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 
 .create-post .create-post-header button#close img {
   width: 25px;
@@ -718,7 +708,17 @@ button#close img {
   height: 34px;
   cursor: pointer;
 }
-
+.create-post .create-post-header button#close {
+  height: 40px;
+  width: 40px;
+  color: #65676b;
+  position: absolute;
+  top: 14px;
+  right: 11px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .create-post .create-post-header button:hover {
   background-color: #e6e7ea;
 }

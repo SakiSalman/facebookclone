@@ -4,6 +4,8 @@ import avatars from '../../_assets/images/avatar.jpg'
 
 
 const Avatar = ({url}) => {
+
+    console.log(url);
     const {user} = useSelector(state => state.auth)
 
     const displayAvatar = () => {
@@ -12,7 +14,7 @@ const Avatar = ({url}) => {
       } 
 
       if(user){
-        return user.profile_photo ? <img src={`/profile/${user.profile_photo}`} alt="" /> : <img src={avatars}/>
+        return url ? <img src={`/profile/${url}`} alt="" /> : <img src={avatars}/>
       }
     }
   return (
