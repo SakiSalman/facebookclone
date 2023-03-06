@@ -3,6 +3,8 @@ import cookie from "js-cookie";
 import createToast from "../../Utility/toast";
 import { LOADER_START } from "../TopLoader/loadertypes";
 import {
+  GETUSER_FAILED,
+  GETUSER_SUCCESS,
   LOGIN_FAILED,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
@@ -269,6 +271,32 @@ export const tokenUser = () => async (dispatch) => {
         });
         console.log(err);
         createToast("warn", err.response.data.message);
+      });
+  } catch (error) {
+    dispatch({
+      type: TOKEN_FAILED,
+      payload: error.response.data.message,
+    });
+    createToast("error", error.response.data.message);
+  }
+};
+// Pull All users
+export const getAllUsers = (id) => async (dispatch) => {
+  try {
+    await axios
+      .get(`/api/v1/user/getalluser/${id}`)
+      .then((res) => {
+        dispatch({
+          type: GETUSER_SUCCESS,
+          payload: res.data.users,
+        });
+ 
+      })
+      .catch((err) => {
+        dispatch({
+          type: GETUSER_FAILED,
+          payload: err.response.data.message,
+        });
       });
   } catch (error) {
     dispatch({
