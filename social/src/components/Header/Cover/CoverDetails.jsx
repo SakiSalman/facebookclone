@@ -7,6 +7,7 @@ import FbModal from '../../Modal/FbModal';
 import ProfilePhotoUpload from './ProfilePhotoUpload';
 import ProfileImageDropdown from './ProfileImageDropdown';
 import usePopupClose from '../../../hooks/usePopupClose';
+import PopupFullWidthright from '../../Popups/PopUpFullWidth/PopupFullWidthright';
 
 
 const CoverDetails = () => {
@@ -15,6 +16,12 @@ const CoverDetails = () => {
     const [uploadPopUp, setUploadPopUp] = useState(false)
     const [showDrop , setShowDrop] = useState(false)
 
+    const [profilePopup, setProfilePopup] = useState(false)
+
+
+    const showProfileDrop = useRef(null)
+
+    usePopupClose(showProfileDrop, setShowDrop)
     
     // handle details modals
   const modalHandler = (e) => {
@@ -26,10 +33,12 @@ const CoverDetails = () => {
         <div className="fb-profile-details">
         <div className="profile-info">
           <div className="profile-photo" onClick={(e) => setShowDrop(!showDrop)}>
-            <Avatar/>
+            <Avatar url={user.profile_photo}/>
 
             {
-              showDrop && <ProfileImageDropdown setUploadPopup={setUploadPopUp}/>
+              showDrop && <div className="profile-image-change-drop" ref={showProfileDrop}>
+                <ProfileImageDropdown setUploadPopup={setUploadPopUp} setPopup={setProfilePopup}/>
+              </div>
             }
 
             <div className="camera-icons" onClick={modalHandler}>
@@ -37,7 +46,7 @@ const CoverDetails = () => {
             </div>
           </div>
           <div className="profile-desc">
-            <h1>{user.first_name + user.sur_name} <span>( neooo inc )</span></h1>
+            <h1>{user.first_name + " " + user.sur_name} <span>( neooo inc )</span></h1>
             <div className="profile-follow-details">
               <span className="profile-followers">15k follower</span>
               <span className="profile-following">1k following</span>
@@ -121,6 +130,19 @@ const CoverDetails = () => {
                     </FbModal>
                 }
             {/* Profile Photo Upload Popup End */}
+
+          {/* {Profile Photo View Popup Starts} */}
+            {
+              profilePopup && <PopupFullWidthright data={{
+                img : user.profile_photo,
+                close : setProfilePopup
+              }}>
+              </PopupFullWidthright>
+            }
+          {/* {Profile Photo View Popup End} */}
+
+
+          
     
     </>
   )

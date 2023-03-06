@@ -31,8 +31,10 @@ const ProfileIntro = () => {
   const [disable, setDisable] = useState(true);
   const [bio, setBio] = useState(user.bio);
   const [remain, setRemain] = useState(
-    101 - (bio.length === 0 ? 0 : bio.length)
+    101 - ( bio === null || bio.length === 0 ? 0 : bio.length)
   );
+
+
 
   const [details, setDetails] = useState(false);
   const [catShow, setCatShow] = useState(false);

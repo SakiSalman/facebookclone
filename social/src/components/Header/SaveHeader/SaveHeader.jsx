@@ -2,7 +2,7 @@ import React from 'react'
 import { FaGlobeAsia } from 'react-icons/fa'
 import './SaveHeader.css'
 
-const SaveHeader = ({saveCover}) => {
+const SaveHeader = ({saveCover, closeAll}) => {
   return (
     <>
 
@@ -14,7 +14,7 @@ const SaveHeader = ({saveCover}) => {
 
               </div>
               <div className="save-heade-right">
-                <button>Cancel</button>
+                <button onClick={closeAll}>Cancel</button>
                 <button className='cover-save' onClick={saveCover}>Save</button>
               </div>
             </div>

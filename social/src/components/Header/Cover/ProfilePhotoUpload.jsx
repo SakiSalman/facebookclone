@@ -10,15 +10,22 @@ import { photoUpdate } from '../../../redux/Auth/action';
 const ProfilePhotoUpload = ({close}) => {
 
     const dispatch = useDispatch()
-    const { user } = useSelector((state) => state.auth);    
+    const { user } = useSelector((state) => state.auth);
+    
+    // Profile image upload State
     const [inputImage, setInputImage] = useState(null)
+    
+    // Profile Image Description State
+    const [value, setValue] = useState('');
 
+
+    // React easy cropper States
     const [crop, setCrop] = useState({ x: 0, y: 0 })
     const [rotation, setRotation] = useState(0)
     const [zoom, setZoom] = useState(1)
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
     const [croppedImage, setCroppedImage] = useState(null)
-  
+
     const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
       setCroppedAreaPixels(croppedAreaPixels)
     }, [])
@@ -45,6 +52,8 @@ const ProfilePhotoUpload = ({close}) => {
       console.error(e)
     }
   }, [croppedAreaPixels, rotation])
+
+
   // Save Peofile pgoto to backend
   const handlePtofilePhoto = async ( e) => {
 
@@ -76,6 +85,12 @@ const ProfilePhotoUpload = ({close}) => {
 
 
   }
+
+
+  // update photo description using handler
+  const handleChange = (event) => {
+      setValue(event.target.value);
+  };
   return (
     <>  
         <div className="profile-upload-wrapper">
@@ -99,7 +114,8 @@ const ProfilePhotoUpload = ({close}) => {
                 inputImage && <div className="profile-upload-resize-wrapper">
                     <div className="image-resize-wrapper">
                         <div className="profile-photo-description">
-                            <textarea name="" id="" placeholder='Description'></textarea>
+                        <textarea id="noter-text-area" placeholder='Description' name="textarea" value={value} onChange={handleChange} />
+                            
                         </div>
                         <div className="profile--resize-box">
                             <Cropper
@@ -109,12 +125,11 @@ const ProfilePhotoUpload = ({close}) => {
                                 aspect={1/1}
                                 showGrid={false}
                                 cropShape={'round'}
+                                cropSiz
                                 onCropChange={setCrop}
                                 onCropComplete={onCropComplete}
                                 onZoomChange={setZoom}
-                                
                             />
-                           
                         </div>
 
                         <div className="resize-slider-wrapper">

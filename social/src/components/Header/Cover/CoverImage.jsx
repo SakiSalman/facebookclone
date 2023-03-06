@@ -88,16 +88,18 @@ const handleCoverInputChange = (e) => {
 
 
 }
+
 // handle modal close
 const modalHandler = () => {
-  setImageUpload(!imageUpload)
-  setCoverUpload(!coverUpload)
+  setImageUpload(false)
+  setCoverUpload(false)
   setPhoto('')
 }
+
   return (
     <>  
       {
-        coverUpload && <SaveHeader saveCover={handleCoverImage}></SaveHeader>
+        coverUpload && <SaveHeader saveCover={handleCoverImage} closeAll = {modalHandler}></SaveHeader>
       }
       <div className="fb-cover-photo">
 
@@ -117,18 +119,18 @@ const modalHandler = () => {
                 aspect={6 / 3}
                 onCropChange={setCrop}
                 onRotationChange={setRotation}
-                cropSize={{width:900, height:500}}
+                cropSize={{width:1280, height:500}}
                 onCropComplete={onCropComplete}
                 onZoomChange={setZoom}
         />
           </div>
         }
-        
-
-          <button onClick={handleCoverPopup}>
+          {
+            !coverUpload && <button onClick={handleCoverPopup}>
             
-              <span className="camera-icon"></span> Edit cover photo
-            </button>
+            <span className="camera-icon"></span> Edit cover photo
+          </button>
+          }
       </div>
 
       {

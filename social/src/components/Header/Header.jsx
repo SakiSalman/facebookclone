@@ -73,7 +73,7 @@ const Header = () => {
             <div className="user-menu-box">
               <div className="user-data-box">
                 <div onClick={handleProfilePage} className="user-data-box-item">
-                  <Avatar/>
+                  <Avatar url={user.profile_photo}/>
 
                   <span>{user.first_name}  {user.sur_name}</span>
                 </div>
@@ -126,7 +126,7 @@ const Header = () => {
               </ul>
             </div>
           </div>}
-          <Avatar/>
+          <Avatar url={user.profile_photo}/>
 
         </div>
       </div>
