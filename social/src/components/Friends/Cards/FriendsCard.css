@@ -1,0 +1,71 @@
+.fnds-card{
+    box-shadow: 0 2px 8px rgb(0 0 0 / 10%), 0 0px 0px rgb(0 0 0 / 10%);
+    width: 13.8%;
+    border-radius: 5px;
+    overflow: hidden;
+    background-color: #fff;
+}
+.fnds-card img{
+    width: 100%;
+}
+.fnds-card-content{
+    background-color: #ffff;
+    padding: 5px;
+
+}
+.fnds-card-content h4{
+    font-size: 16px;
+}
+
+.mutual-icons {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 5px 0px;
+}
+.mutual-icons img{
+    width: 20px;
+    height: 20px;
+    object-fit: cover;
+    border-radius: 100%;
+}
+.mutual-icons img:nth-last-child(n+2){
+    margin-right: -10px;
+}
+.fnds-button-area{
+    padding: 10px 0px;
+}
+.fnds-button-area button{
+    padding: 8px;
+    width: 100%;
+    margin-bottom: 5px;
+    border: none;
+    outline: none;
+    transition: .5s ease;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.fnds-button-area button.fnds-confirm{
+    background-color: #0a7cd9;
+    color: #fff;
+
+
+}
+.fnds-button-area button.fnds-add{
+    background-color: #d9eaf7;
+    color: #1380b7;
+
+
+}
+.fnds-button-area button:hover{
+    background: #0a7cd9;
+    color: #fff;
+}
+.fnds-button-area button.fnds-confirm:hover{
+    background-color: #e4e2e2;
+    color: #2b86db;
+}
+
+.fnds-button-area button:last-child{
+    margin: 0;
+}
