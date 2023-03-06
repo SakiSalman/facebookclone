@@ -878,3 +878,25 @@ export const updateCoverPhoto = async (req, res, next) => {
     return next(error);
   }
 };
+export const getAllUser = async (req, res, next) => {
+  try {
+
+    const {id} = req.params
+
+    console.log(id);
+
+      // pull all users frm DB
+      const users = await User.find().select('-password').where('_id').ne(id)
+
+    if (users) {
+      return res.status(200).json({
+        users: users
+      });
+    } else {
+      return next(createError(400, "No User Found"));
+    }
+  } catch (error) {
+    console.log(error);
+    return next(error);
+  }
+};
