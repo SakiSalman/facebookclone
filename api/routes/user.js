@@ -16,7 +16,9 @@ import {
   editFeaturedData,
   updateProfilePhoto,
   updateCoverPhoto,
-  getAllUser
+  getAllUser,
+  addFriends,
+  sendFriendsReq
 } from "../controllers/userController.js";
 
 const __dirname = path.resolve();
@@ -50,6 +52,8 @@ const cover = multer({ storage }).single("coverphoto");
 router.post("/login", Userlogin);
 router.post("/register", register);
 router.post("/get-user", getUser);
+router.get("/add-friend/:recever/:sender", addFriends);
+router.get("/send-friend/:recever/:sender", sendFriendsReq);
 router.get("/getalluser/:id", getAllUser);
 router.post("/reset-password/:token", resetPassword);
 router.post("/resend-code", resendOtpCode);

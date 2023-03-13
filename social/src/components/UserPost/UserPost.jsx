@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 import Avatar from '../Avatar/Avatar'
 
 const UserPost = () => {
+  const {user} = useSelector(state => state.auth)
+
     const [showDrop, setShowDrop] = useState(false)
     
     return (
@@ -9,7 +12,7 @@ const UserPost = () => {
     <div className="user-post">
             <div className="user-post-header">
               <div className="post-info">
-                <Avatar/>
+                <Avatar url={user.profile_photo}/>
                 <div className="user-details">
                   <a className="author" href="#">Asraful Haque</a>
                   <span>10m &nbsp;

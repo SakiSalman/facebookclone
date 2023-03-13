@@ -1,5 +1,4 @@
 import User from "../models/User.js";
-import fs from "fs";
 import createError from "../utility/createError.js";
 import { hasPassword } from "../utility/hasPassword.js";
 import { verification_code } from "../utility/math.js";
@@ -878,12 +877,102 @@ export const updateCoverPhoto = async (req, res, next) => {
     return next(error);
   }
 };
+
+/**
+ * @access Privet
+ * @method Patch
+ * @route /addfriends
+ * @Purpose Update User Data
+ */
+export const addFriends = async (req, res, next) => {
+  try {
+
+
+    const {recever, sender} = req.params
+
+
+      const receve = await User.findById(recever) //Who will Confirm
+
+      const send = await User.findById(sender)  //who will send request
+
+      await receve.updateOne({
+        $push : {friends : sender}
+      })
+      await receve.updateOne({
+        $push : {followers : sender}
+      })
+      await send.updateOne({
+          $push : {follwings : recever}
+        })
+        await send.updateOne({
+          $push : {friends : recever}
+        })
+      let requestData = await receve.requests.filter( data => data._id === sender)
+
+      await receve.updateOne({
+        requests : requestData
+      })
+      const users = await User.find().select('-password').where('_id').ne(recever)
+
+      if (users) {
+        return res.status(200).json({
+          users: users
+        });
+      }
+     
+
+  } catch (error) {
+    console.log(error);
+    return next(error);
+  }
+};
+
+/**
+ * @access Privet
+ * @method Patch
+ * @route /send-friend 
+ * @Purpose Send Friend Req 
+ */
+export const sendFriendsReq = async (req, res, next) => {
+  try {
+
+    const {recever, sender} = req.params
+
+
+      const receve = await User.findById(recever) //Who will Confirm
+
+      const send = await User.findById(sender)  //who will send "Sneder"request
+
+      await receve.updateOne({
+        $push : {followers : sender}
+      })
+      await send.updateOne({
+          $push : {follwings : recever}
+    })
+
+    await receve.updateOne({
+        requests : sender
+      })
+
+      
+      const users = await User.find().select('-password').where('_id').ne(sender)
+ 
+      if (users) {
+        return res.status(200).json({
+          users: users
+        });
+      }
+     
+
+  } catch (error) {
+    console.log(error);
+    return next(error);
+  }
+};
 export const getAllUser = async (req, res, next) => {
   try {
 
     const {id} = req.params
-
-    console.log(id);
 
       // pull all users frm DB
       const users = await User.find().select('-password').where('_id').ne(id)
@@ -900,3 +989,6 @@ export const getAllUser = async (req, res, next) => {
     return next(error);
   }
 };
+
+
+

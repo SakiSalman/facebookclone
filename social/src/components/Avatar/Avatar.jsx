@@ -5,15 +5,15 @@ import avatars from '../../_assets/images/avatar.jpg'
 
 const Avatar = ({url}) => {
 
-    console.log(url);
+   
     const {user} = useSelector(state => state.auth)
 
     const displayAvatar = () => {
-      if (!user) {
+      if (!url) {
           return <img src={avatars} alt="" />
       } 
 
-      if(user){
+      if(url){
         return url ? <img src={`/profile/${url}`} alt="" /> : <img src={avatars}/>
       }
     }

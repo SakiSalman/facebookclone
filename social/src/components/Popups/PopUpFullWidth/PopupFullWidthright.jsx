@@ -13,8 +13,6 @@ const PopupFullWidthright = ({ children, data }) => {
 
     const {close, img} = data
 
-    console.log(img);
-
     return (
         <>
 

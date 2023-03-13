@@ -307,6 +307,59 @@ export const getAllUsers = (id) => async (dispatch) => {
   }
 };
 
+// Update Friends
+export const updateFriendsData = (recever, sender) => async (dispatch) => {
+  try {
+    await axios.get(`/api/v1/user/add-friend/${recever}/${sender}`)
+      .then((res) => {
+        console.log(res.data);
+        dispatch({
+          type: GETUSER_SUCCESS,
+          payload: res.data.users,
+        });
+ 
+      })
+      .catch((err) => {
+        dispatch({
+          type: GETUSER_FAILED,
+          payload: err.response.data.message,
+        });
+      });
+  } catch (error) {
+    dispatch({
+      type: TOKEN_FAILED,
+      payload: error.response.data.message,
+    });
+    createToast("error", error.response.data.message);
+  }
+};
+// Send Friends Req
+export const sendFriendReq = (sender, recever) => async (dispatch) => {
+  try {
+    await axios.get(`/api/v1/user/send-friend/${recever}/${sender}`)
+      .then((res) => {
+        console.log(res.data);
+        dispatch({
+          type: GETUSER_SUCCESS,
+          payload: res.data.users,
+        });
+ 
+      })
+      .catch((err) => {
+        dispatch({
+          type: GETUSER_FAILED,
+          payload: err.response.data.message,
+        });
+      });
+  } catch (error) {
+    dispatch({
+      type: TOKEN_FAILED,
+      payload: error.response.data.message,
+    });
+    createToast("error", error.response.data.message);
+  }
+};
+
 // logout User
 export const userLogout = () => (dispatch) => {
   cookie.remove("accessToken");

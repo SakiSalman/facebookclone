@@ -16,7 +16,7 @@ const HomeSidebar = () => {
           <li>
             <Link to="/profile">
               <div className="body-icon">
-              <Avatar/>
+              <Avatar url={user.profile_photo}/>
               </div>
               <span>{user.first_name}  {user.sur_name}</span>
             </Link>

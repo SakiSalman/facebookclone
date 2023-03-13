@@ -10,14 +10,12 @@ import './FriendsContainer.css'
 const FriendsContainer = () => {
 
     const {users, user} = useSelector(state => state.auth)
-
-    
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(getAllUsers(user._id))
 
-    }, [])
+    }, [dispatch])
 
   return (
     <>
@@ -34,9 +32,11 @@ const FriendsContainer = () => {
 
                     {
                         users.map( (data, index) => {
-
+                            
                             if (user.requests.includes(data._id)) {
-                                return <FriendsCard user={data} key={index}/> 
+
+                                
+                                return <FriendsCard users={data} user={user}  buttonState={'request'} key={index}/> 
                             }
                             
                            
@@ -60,16 +60,20 @@ const FriendsContainer = () => {
                     <div className="fnds-cards-wrapper"> 
 
                     
-                    {
-                        users.map( (data, index) => {
-
-                            if (!user.requests.includes(data._id) && !user.friends.includes(data._id)) {
-                                return <FriendsCard user={data} key={index}/> 
-                            }
-                            
-                           
-                        }) 
-                    } 
+                    
+                           {
+                            users.map( (data, index) => {
+                                
+                                if (!user.requests.includes(data._id) && !user.friends.includes(data._id)) {
+    
+                                    
+                                    return <FriendsCard users={data} user={user}  buttonState={'mayknow'} key={index}/> 
+                                }
+                                
+                               
+                            }) 
+                        }
+                     
                       
                         
                     </div>

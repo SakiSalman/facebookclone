@@ -7,9 +7,12 @@ import flag from '../../_assets/icons/flag.png'
 import smile from '../../_assets/icons/smile.png'
 import taguser from '../../_assets/icons/adtag.png'
 import cross from '../../_assets/icons/cross.png'
+import { useSelector } from 'react-redux'
 
 
 const CreatePost = () => {
+  const {user} = useSelector(state => state.auth)
+
 
   const [openPostPopup, setOpenPostPopup] = useState(false)
   const [close, setClose] = useState(false)
@@ -17,7 +20,7 @@ const CreatePost = () => {
     <>
                   <div className="create-post">
             <div className="create-post-header">
-              <Avatar />
+            <Avatar url={user.profile_photo}/>
               <button onClick={() => setOpenPostPopup(!openPostPopup)}>What's on your mind ?</button>
 
               {
